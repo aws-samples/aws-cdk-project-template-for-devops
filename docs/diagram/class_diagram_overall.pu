@@ -1,0 +1,151 @@
+@startuml ClassDiagram01
+
+scale 2
+title Overall Class Diagram
+
+
+package CDK-Project {
+
+    ' ----------Lib Template Layer----------------'
+    package CDK-Project {
+
+    ' ----------Lib Template Layer----------------'
+    package lib {
+        package template #DDDDDD {
+            interface AppConfig {
+                +project: Project
+                +stack: any
+            }
+
+            class AppContext {
+                +cdkApp: cdk.App
+                +appConfig: AppConfig
+                +stackCommonProps: StackCommonProps
+                +ready()
+                -createStackCommonProps()
+                -findAppConfigFile()
+                -getProjectPrefix()
+                -loadAppConfigFile()
+                -updateContextArgs()
+                -addPrefixIntoStackName()
+            }
+
+            package construct {
+                namespace construct.base {
+                    interface ConstructCommonProps {
+                        projectPrefix: string
+                        stackConfig: StackConfig
+                        region: string
+                        account: string
+                        variable: any
+                    }
+                    class BaseConstruct {
+                        #putParameter()
+                        #getParameter()
+                        #putVariable()
+                        #getVariable()
+                        #exportOutput()
+                        #createS3Bucket()
+                        #createS3BucketName()
+                    }
+                    cdk.Construct <|-- BaseConstruct
+                    BaseConstruct o-right-> ConstructCommonProps
+                }
+            }
+
+            package stack {
+                namespace stack.base {
+                    interface StackCommonProps {
+                        projectPrefix: string
+                        appConfig: AppConfig
+                        appConfigPath: string
+                        variable: any
+                    }
+                    class BaseStack {
+                        #putParameter()
+                        #getParameter()
+                        #putVariable()
+                        #getVariable()
+                        #exportOutput()
+                        #createS3Bucket()
+                        #createS3BucketName()
+                    }
+                    BaseStack o-right-> StackCommonProps
+                }
+                package vpc {
+                    class VpcBaseStack <<abstract>> {
+                        #onLookupLegacyVpc()
+                        #onPostConstructor()
+                    }
+                    stack.base.BaseStack <|-- VpcBaseStack
+                }
+                package cfn {
+                    class CfnIncludeStack <<abstract>> {
+                        #onLoadTemplateProps() 
+                        #onPostConstructor()
+                    }
+                    stack.base.BaseStack <|-- CfnIncludeStack
+                }
+                package other {
+                    class OtherStack <<abstract>> {
+
+                    }
+                    stack.base.BaseStack <|-- OtherStack
+                }
+
+            }
+            namespace pattern {
+                class LambdaPattern {
+                }
+                class CloudWatchPattern {
+                }
+            }
+            pattern -right[hidden]-> AppContext
+            AppConfig <--* AppContext
+            stack.base.StackCommonProps <--* AppContext
+        }
+    cdk.App <--* AppContext
+    cdk.Stack <|-- stack.base.BaseStack
+    stack.base.StackCommonProps --> AppConfig
+    cdk.StackProps <|-- stack.base.StackCommonProps
+    }
+
+    '----------App Infra Layer----------------'
+    package infra {
+        namespace infra.stack {
+            class SampleCfnVpcStack {
+                
+            }
+            class SampleVpcRdsStack {
+
+            }
+            class SampleVpcEcsStack {
+
+            }
+            class SampleVpcCloud9Stack {
+
+            }
+        }
+
+        file app_config_demo.json {
+        }
+        file app_main.ts <<entry-point>> {
+        }
+        
+        infra.stack.SampleCfnVpcStack --* app_main.ts 
+        infra.stack.SampleVpcRdsStack --* app_main.ts
+        infra.stack.SampleVpcEcsStack --* app_main.ts
+        infra.stack.SampleVpcCloud9Stack --* app_main.ts
+         AppContext ..> app_config_demo.json
+         app_main.ts *-up-> AppContext
+         app_main.ts .down[hidden].> app_config_demo.json
+    }
+
+    AppContext -down[hidden]-> infra
+    CfnIncludeStack <|-- infra.stack.SampleCfnVpcStack
+    VpcBaseStack <|-- infra.stack.SampleVpcRdsStack
+    VpcBaseStack <|-- infra.stack.SampleVpcEcsStack
+    VpcBaseStack <|-- infra.stack.SampleVpcCloud9Stack
+}
+
+@enduml

@@ -1,0 +1,43 @@
+{
+    "Project": {
+        "Name": "HelloWorld",
+        "Stage": "Demo",
+        "Account": "75157*******",
+        "Region": "us-east-2",
+        "Profile": "cdk-demo"
+    },
+
+    "Stack": {
+        "SampleCfnVpc": {
+            "Name": "SampleCfnVpcStack",
+
+            "TemplatePath": "infra/stack/template/sample-cfn-vpc.yaml",
+            "Parameters": [
+                {
+                    "Key": "VpcName",
+                    "Value": "HelloWorldDemo-Vpc"
+                }
+            ]
+        },
+        "SampleVpcRds": {
+            "Name": "SampleVpcRdsStack",
+
+            "ClusterIdentifier": "SampeDatabase",
+            "DatabaseName": "helloworld"
+        },
+        "SampleVpcEcs": {
+            "Name": "SampleVpcEcsStack",
+
+            "ClusterName": "SampleCluster",
+            "FilePath": "codes/sample-backend-fastapi",
+            "Memory": 1024,
+            "Cpu": 512,
+            "DesiredCount": 1
+        },
+        "SampleVpcCloud9": {
+            "Name": "SampleVpcCloud9Stack",
+
+            "ClusterName": "SampleCluster"
+        }
+    }
+}

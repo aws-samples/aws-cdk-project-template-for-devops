@@ -1,0 +1,2 @@
+pymysql
+boto3
