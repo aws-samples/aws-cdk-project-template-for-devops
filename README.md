@@ -18,7 +18,7 @@ This repository provides best practices and template framework for developing AW
 
 4. [Sample Stacks](#4-sample-stacks)
 
-5. [Reference Projects](#5-reference-projects)
+5. [Projects based on this framework](#5-projects-based-on-this-framework)
 
 6. [Security](#6-security)
 
@@ -564,7 +564,7 @@ Execute the following command, which will destroy all resources except RDS Datab
 sh ./script/destroy_stacks.sh config/app-config-demo.json
 ```
 
-## 5. Reference Projects
+## 5. Projects based on this framework
 
 - [Amazon Sagemaker Model Serving Using AWS CDK](https://github.com/aws-samples/amazon-sagemaker-model-serving-using-aws-cdk)
 - [AWS ECS DevOps UsingAWS CDK](https://github.com/aws-samples/aws-ecs-devops-using-aws-cdk)
