@@ -18,13 +18,13 @@ echo .
 
 echo ==--------DestroyStacksStepByStep---------==
 if [ -z "$PROFILE_NAME" ]; then
-    cdk destroy *-SampleVpcCloud9Stack --force
     cdk destroy *-SampleVpcEcsStack --force
+    cdk destroy *-SampleVpcCloud9Stack --force
     cdk destroy *-SampleVpcRdsStack --force
     cdk destroy *-SampleCfnVpcStack --force
 else
-    cdk destroy *-SampleVpcCloud9Stack --force --profile $PROFILE_NAME
     cdk destroy *-SampleVpcEcsStack --force --profile $PROFILE_NAME
+    cdk destroy *-SampleVpcCloud9Stack --force --profile $PROFILE_NAME
     cdk destroy *-SampleVpcRdsStack --force --profile $PROFILE_NAME
     cdk destroy *-SampleCfnVpcStack --force --profile $PROFILE_NAME
 fi

@@ -27,13 +27,13 @@ echo ==--------DeployStacksStepByStep---------==
 if [ -z "$PROFILE_NAME" ]; then
     cdk deploy *-SampleCfnVpcStack --require-approval never
     cdk deploy *-SampleVpcRdsStack --require-approval never
-    cdk deploy *-SampleVpcEcsStack --require-approval never
     cdk deploy *-SampleVpcCloud9Stack --require-approval never
+    cdk deploy *-SampleVpcEcsStack --require-approval never
 else
     cdk deploy *-SampleCfnVpcStack --require-approval never --profile $PROFILE_NAME
     cdk deploy *-SampleVpcRdsStack --require-approval never --profile $PROFILE_NAME
-    cdk deploy *-SampleVpcEcsStack --require-approval never --profile $PROFILE_NAME
     cdk deploy *-SampleVpcCloud9Stack --require-approval never --profile $PROFILE_NAME
+    cdk deploy *-SampleVpcEcsStack --require-approval never --profile $PROFILE_NAME
 fi
 echo .
 echo .
