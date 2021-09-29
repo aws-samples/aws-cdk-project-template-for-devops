@@ -42,13 +42,10 @@ def get_secret(secret_name: str):
         elif e.response['Error']['Code'] == 'ResourceNotFoundException':
             raise e
     else:
-        print('get_secret---else')
         if 'SecretString' in get_secret_value_response:
             secret = get_secret_value_response['SecretString']
-            logger.info(f'11--->{secret}')
         else:
             secret = base64.b64decode(get_secret_value_response['SecretBinary'])
-            logger.info(f'22--->{secret}')
         return secret
 
 
