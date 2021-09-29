@@ -271,13 +271,17 @@ The stack and construct corresponding to the parent class are planned to be grad
 
 ## 4. Sample Stacks
 
-This section explains how to use each base class with example code. First of all, please refer to the following overall class diagram. It is implemented with 4 stacks for a typical backend service.
+This section explains how to use each base class with example codes. This sample implements a typical backend service, which has a private ALB, ECS Cluster/Service/Task(python container), Aurora RDS and Cloud9(RDS bastion host) in a VPC. Based on CDK best practices, all of this has been implemented in four stacks.
+
+![sample-backend-service-architecture1](docs/asset/sample-backend-service-architecture1.png)
+
+You can see what parent class each stack inherits from through the following full diagram.
 
 ![classdiagram-overall](docs/asset/classdiagram-overall.png)
 
 ### SampleCfnVpcStack
 
-This stack inherits from the parent stack(CfnIncludeStack). Write the information about CloudFormation template in the config, and pass this information to the `onLoadTemplateProps` function. The final loaded result is passed through `onPostConstructor` function.
+This stack creates a VPC using CloudFormation yaml file. For that reason, it inherits from CfnIncludeStack which can automatically load yaml file instead of us. Write the information about CloudFormation template in the config. If you pass yaml path and parameters to `onLoadTemplateProps` method, Cfn object is passed to `onPostConstructor`.
 
 - Stack Configuration
 
@@ -301,10 +305,13 @@ This stack inherits from the parent stack(CfnIncludeStack). Write the informatio
         },
         "SampleVpcRds": {
             ...
-        },        
+        },      
+        "SampleVpcCloud9": {
+            ...
+        },      
         "SampleVpcEcs": {
             ...
-        }        
+        }   
     }
 }
 ```
@@ -343,11 +350,13 @@ export class SampleCfnVpcStack extends base.CfnIncludeStack {
 }
 ```
 
-Saves `VpcName` in a local variable. this VPC parameter is utilized in `SampleVpcRdsStack`, `SampleVpcEcsStack` to load VPC.
+VPC name is stored in memory via `putVariable` method and will be used to retrieve VPC object from other stacks.
 
 ### SampleVpcRdsStack
 
-This stack inherits from the parent stack(VpcBaseStack). Write the information about RDS Database in the config, and pass this information to the `onLookupLegacyVpc` function. The final loaded result is passed through `onPostConstructor` function.
+This stack creates Aurora serverless database in VPC which was created in `SampleCfnVpcStack`. Since it inherits from VpcBastStack, if you pass VPC name to `onLookupLegacyVpc` method, VPC object is passed to `onPostConstructor`.
+
+And database parameters are saved through `putParateter` method, which will save those into `Parameter store` in `Secrets Manager` instead of us.
 
 - Stack Configuration
 
@@ -366,10 +375,13 @@ This stack inherits from the parent stack(VpcBaseStack). Write the information a
 
             "ClusterIdentifier": "SampeDatabase",
             "DatabaseName": "helloworld"
-        },     
+        },
+        "SampleVpcCloud9": {
+            ...
+        },
         "SampleVpcEcs": {
             ...
-        },     
+        },
     }
 }
 ```
@@ -421,14 +433,85 @@ export class SampleVpcRdsStack extends base.VpcBaseStack {
         this.putParameter('DatabaseSecurityGroup', cluster.connections.securityGroups[0].securityGroupId);
     }
 }
-
 ```
 
-Import `VpcName` through `getVariable` function. This technique avoids hard-coding, helping flexible deployments. And database parameters are saved through `putParateter` method.
+### SampleVpcCloud9Stack
+
+This stack just creates a Cloud9 EC2 instance in the first publict subent of VPC, so there is no special configuration in the config file. Since it inherits from VpcBastStack, if you pass VPC name to `onLookupLegacyVpc` method, VPC object is passed to `onPostConstructor`.
+
+- Stack Configuration
+
+```json
+{
+    "Project": {
+        ...
+    },
+
+    "Stack": {
+        "SampleCfnVpc": {
+            ...
+        },
+        "SampleVpcRds": {
+            ...
+        },
+        "SampleVpcCloud9": {
+            "Name": "SampleVpcCloud9Stack"
+
+        },  
+        "SampleVpcEcs": {
+            ...
+        },
+    }
+}
+```
+
+- Stack Implementation
+
+```typescript
+import * as ec2 from '@aws-cdk/aws-ec2';
+import * as cloud9 from '@aws-cdk/aws-cloud9';
+
+import * as base from '../../lib/template/stack/vpc/vpc-base-stack';
+import { AppContext } from '../../lib/template/app-context';
+import { Override } from '../../lib/template/stack/base/base-stack';
+
+
+export class SampleVpcCloud9Stack extends base.VpcBaseStack {
+
+    constructor(appContext: AppContext, stackConfig: any) {
+        super(appContext, stackConfig);
+    }
+
+    @Override
+    onLookupLegacyVpc(): base.VpcLegacyLookupProps | undefined {
+        return {
+            vpcNameLegacy: this.getVariable('VpcName')
+        };
+    }
+
+    @Override
+    onPostConstructor(baseVpc?: ec2.IVpc) {
+
+        const subnet = baseVpc?.publicSubnets[0];
+        
+        new cloud9.Ec2Environment(this, 'Cloud9Env2', {
+            vpc: baseVpc!,
+            ec2EnvironmentName: `${this.projectPrefix}-DatabaseConnection`,
+            instanceType: new ec2.InstanceType('t3.large'),
+            subnetSelection: {
+                subnets: [subnet!]
+            }
+        });
+
+        const databaseSecurityGroup = ec2.SecurityGroup.fromSecurityGroupId(this, 'DatabaseSecurityGroup', this.getParameter('DatabaseSecurityGroup'));
+        databaseSecurityGroup.addIngressRule(ec2.Peer.ipv4(subnet?.ipv4CidrBlock!), ec2.Port.tcp(3306), 'from cloud9 subnet');
+    }
+}
+```
 
 ### SampleVpcEcsStack
 
-This stack inherits from the parent stack(VpcBaseStack). Write the information about ECS Cluster in the config, and pass this information to the `onLookupLegacyVpc` function. The final loaded result is passed through `onPostConstructor` function.
+This stack creates ECS Cluster/Serice/Task. Since it inherits from VpcBastStack, if you pass VPC name to `onLookupLegacyVpc` method, VPC object is passed to `onPostConstructor`.
 
 - Stack Configuration
 
@@ -461,7 +544,6 @@ This stack inherits from the parent stack(VpcBaseStack). Write the information a
 - Stack Implementation
 
 ```typescript
-
 import * as ec2 from '@aws-cdk/aws-ec2';
 import * as ecs from '@aws-cdk/aws-ecs';
 import * as sm from '@aws-cdk/aws-secretsmanager';
@@ -528,8 +610,6 @@ export class SampleVpcEcsStack extends base.VpcBaseStack {
 }
 ```
 
-Database information is passed to ECS through environment variables.
-
 ### Install dependecies & Bootstrap
 
 Execute the following command:
@@ -555,6 +635,51 @@ sh scripts/deploy_stacks.sh config/app-config-demo.json
 #### Deployment Results
 
 You can find the deployment results in AWS CloudFormation.
+
+After `Cloud9` is deployed, connect and run the following sql script.  completing deployment of Cloud9. Database access information(host_name, username, password) can be checked in `Secrets Manager`.
+
+Database Connection
+
+```bash
+mysql -h host_name -u admin -p
+```
+
+SQL Commands
+
+```
+CREATE DATABASE IF NOT EXISTS helloworld;
+USE helloworld;
+
+CREATE TABLE IF NOT EXISTS Items (
+	            ID int NOT NULL AUTO_INCREMENT,
+		        NAME varchar(255) NOT NULL UNIQUE,
+			    PRIMARY KEY (ID)
+			);
+
+
+INSERT INTO Items (NAME) VALUES ("name-001");
+SELECT * FROM Items;
+```
+
+Finally we can call internal REST APIs in `Cloud9`. Execute the following commands in `Cloud9`:
+
+```bash
+curl ALB_DNS_NAME
+...
+...
+{"Health": "Good"}
+```
+
+Or
+
+```bash
+curl ALB_DNS_NAME/items
+...
+...
+{"items": [[1,"name-001"]]}
+```
+
+Where `ALB_DNS_NAME` is found in `LoadBalancers` in `EC2` web console.
 
 #### How to clean up
 

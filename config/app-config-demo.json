@@ -25,6 +25,10 @@
             "ClusterIdentifier": "SampeDatabase",
             "DatabaseName": "helloworld"
         },
+        "SampleVpcCloud9": {
+            "Name": "SampleVpcCloud9Stack"
+
+        },
         "SampleVpcEcs": {
             "Name": "SampleVpcEcsStack",
 
@@ -33,11 +37,6 @@
             "Memory": 1024,
             "Cpu": 512,
             "DesiredCount": 1
-        },
-        "SampleVpcCloud9": {
-            "Name": "SampleVpcCloud9Stack",
-
-            "ClusterName": "SampleCluster"
         }
     }
 }
