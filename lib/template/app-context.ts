@@ -74,7 +74,7 @@ export class AppContext {
                 account: this.appConfig.Project.Account,
                 region: this.appConfig.Project.Region
             },
-            variable: {}
+            variables: {}
         }
 
         return stackProps;
