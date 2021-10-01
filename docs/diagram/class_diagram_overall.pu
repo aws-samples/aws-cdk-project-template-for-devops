@@ -6,9 +6,14 @@ title Overall Class Diagram
 
 package CDK-Project {
 
-    ' ----------Lib Template Layer----------------'
-    package CDK-Project {
-
+    ' ----------CDK Core Layer----------------'
+    namespace cdk {
+        class Stack {}
+        class StackProps {}
+        class Construct {}
+        class App {}
+    }
+    
     ' ----------Lib Template Layer----------------'
     package lib {
         package template #DDDDDD {
@@ -30,6 +35,32 @@ package CDK-Project {
                 -addPrefixIntoStackName()
             }
 
+            namespace template.common {
+                interface ICommonHelper {
+                    findEnumType<T>(): T[keyof T];
+                    exportOutput(): void;
+                    putParameter(): string;
+                    getParameter(): string;
+                    putVariable(): void;
+                    getVariable(): string;
+                }
+                class CommonHelper {
+
+                }
+
+                CommonHelper ..|> ICommonHelper
+                
+                interface ICommonGuardian {
+                    createS3BucketName(): string;
+                    createS3Bucket(): s3.Bucket;
+                }
+                class ICommonGuardian {
+
+                }
+
+                CommonGuardian ..|> ICommonGuardian
+            }
+
             package construct {
                 namespace construct.base {
                     interface ConstructCommonProps {
@@ -40,16 +71,8 @@ package CDK-Project {
                         variable: any
                     }
                     class BaseConstruct {
-                        #putParameter()
-                        #getParameter()
-                        #putVariable()
-                        #getVariable()
-                        #exportOutput()
-                        #createS3Bucket()
-                        #createS3BucketName()
                     }
-                    cdk.Construct <|-- BaseConstruct
-                    BaseConstruct o-right-> ConstructCommonProps
+                    BaseConstruct o-left-> ConstructCommonProps
                 }
             }
 
@@ -62,13 +85,6 @@ package CDK-Project {
                         variable: any
                     }
                     class BaseStack {
-                        #putParameter()
-                        #getParameter()
-                        #putVariable()
-                        #getVariable()
-                        #exportOutput()
-                        #createS3Bucket()
-                        #createS3BucketName()
                     }
                     BaseStack o-right-> StackCommonProps
                 }
@@ -94,6 +110,12 @@ package CDK-Project {
                 }
 
             }
+            
+            stack.base.BaseStack .up.|> template.common.ICommonHelper
+            construct.base.BaseConstruct .up.|> template.common.ICommonHelper
+            stack.base.BaseStack .up.|> template.common.ICommonGuardian
+            construct.base.BaseConstruct .up.|> template.common.ICommonGuardian
+            
             namespace pattern {
                 class LambdaPattern {
                 }
@@ -104,10 +126,12 @@ package CDK-Project {
             AppConfig <--* AppContext
             stack.base.StackCommonProps <--* AppContext
         }
-    cdk.App <--* AppContext
-    cdk.Stack <|-- stack.base.BaseStack
+    template.common -up[hidden]-> cdk.App
+    AppContext *-up-> cdk.App
+    stack.base.BaseStack -up-|> cdk.Stack
+    stack.base.StackCommonProps -up-|> cdk.StackProps
+    cdk.Construct <|-down- construct.base.BaseConstruct
     stack.base.StackCommonProps --> AppConfig
-    cdk.StackProps <|-- stack.base.StackCommonProps
     }
 
     '----------App Infra Layer----------------'
