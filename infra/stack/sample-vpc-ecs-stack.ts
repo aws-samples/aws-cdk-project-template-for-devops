@@ -26,8 +26,8 @@ export class SampleVpcEcsStack extends base.VpcBaseStack {
     onPostConstructor(baseVpc?: ec2.IVpc) {
         const databaseHostName = this.getParameter('DatabaseHostName');
         const databaseName = this.getParameter('DatabaseName');
-        const databaseSecreteArn = this.getParameter('DatabaseSecreteArn');
-        const databaseSecrete = sm.Secret.fromSecretCompleteArn(this, 'secrete', databaseSecreteArn);
+        const databaseSecretArn = this.getParameter('DatabaseSecretArn');
+        const databaseSecret = sm.Secret.fromSecretCompleteArn(this, 'secret', databaseSecretArn);
 
         const taskDef = new ecs.FargateTaskDefinition(this, 'TaskDef');
         taskDef.addContainer('DefaultContainer', {
@@ -38,14 +38,14 @@ export class SampleVpcEcsStack extends base.VpcBaseStack {
             environment: {
                 HOST_NAME: databaseHostName,
                 DATABASE_NAME: databaseName,
-                SECRETE_ARN: databaseSecreteArn,
+                SECRET_ARN: databaseSecretArn,
             },
             portMappings: [{
                 containerPort: 80,
                 protocol: ecs.Protocol.TCP
             }]
         });
-        databaseSecrete.grantRead(taskDef.taskRole);
+        databaseSecret.grantRead(taskDef.taskRole);
 
         const albEcsService = new ecsPatterns.ApplicationLoadBalancedFargateService(this, 'Service', {
             cluster: new ecs.Cluster(this, 'cluster', {

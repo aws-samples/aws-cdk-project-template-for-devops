@@ -65,9 +65,9 @@ def connect_database(rds_host, rds_port, db_name, secret_value):
 
 
 def load_database():
-    secrete_arn = os.environ.get('SECRETE_ARN', 'no-arn')
-    print('SECRETE_ARN', secrete_arn)
-    secret_value = get_secret(secrete_arn)
+    secret_arn = os.environ.get('SECRET_ARN', 'no-arn')
+    print('SECRET_ARN', secret_arn)
+    secret_value = get_secret(secret_arn)
     
     host_name = os.environ.get('HOST_NAME', 'no-host')
     port_number = int(os.environ.get('PORT_NUMBER', '3306'))

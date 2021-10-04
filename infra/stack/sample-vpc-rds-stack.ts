@@ -39,7 +39,7 @@ export class SampleVpcRdsStack extends base.VpcBaseStack {
         this.putParameter('DatabaseHostName', cluster.clusterEndpoint.hostname);
         this.putParameter('DatabaseAddress', cluster.clusterEndpoint.socketAddress);
         this.putParameter('DatabaseName', this.stackConfig.DatabaseName);
-        this.putParameter('DatabaseSecreteArn', cluster.secret?.secretArn!);
+        this.putParameter('DatabaseSecretArn', cluster.secret?.secretArn!);
         this.putParameter('DatabaseSecurityGroup', cluster.connections.securityGroups[0].securityGroupId);
     }
 }
