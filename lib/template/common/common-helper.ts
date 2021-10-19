@@ -43,6 +43,7 @@ export class CommonHelper implements ICommonHelper {
     protected props: CommonHelperProps;
 
     constructor(props: CommonHelperProps) {
+        this.stackName = props.stackName;
         this.props = props;
         this.projectPrefix = props.projectPrefix;
     }
