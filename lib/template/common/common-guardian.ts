@@ -39,6 +39,7 @@ export class CommonGuardian implements ICommonGuardian {
     protected props: CommonGuardianProps;
 
     constructor(props: CommonGuardianProps) {
+        this.stackName = props.stackName;
         this.props = props;
         this.projectPrefix = props.projectPrefix;
     }
