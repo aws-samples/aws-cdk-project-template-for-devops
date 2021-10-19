@@ -151,7 +151,9 @@ export class AppContext {
 
     private addPrefixIntoStackName(appConfig: any, projectPrefix: string) {
         for (const key in appConfig.Stack) {
-            appConfig.Stack[key].Name = `${projectPrefix}-${appConfig.Stack[key].Name}`;
+            const stackOriginalName = appConfig.Stack[key].Name;
+            appConfig.Stack[key].ShortStackName = stackOriginalName;
+            appConfig.Stack[key].Name = `${projectPrefix}-${stackOriginalName}`;
         }
     }
 }
