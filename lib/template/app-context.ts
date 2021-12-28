@@ -18,7 +18,7 @@
 
 const fs = require('fs');
 const env = require('env-var');
-import * as cdk from '@aws-cdk/core';
+import * as cdk from 'aws-cdk-lib';
 
 import { AppConfig } from './app-config';
 import { StackCommonProps } from './stack/base/base-stack';

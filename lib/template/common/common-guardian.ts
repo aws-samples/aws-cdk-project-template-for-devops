@@ -16,8 +16,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as cdk from '@aws-cdk/core';
-import * as s3 from '@aws-cdk/aws-s3';
+import { Construct } from 'constructs';
+import * as cdk from 'aws-cdk-lib';
+import * as s3 from 'aws-cdk-lib/aws-s3';
 
 
 export interface ICommonGuardian {
@@ -28,7 +29,7 @@ export interface ICommonGuardian {
 export interface CommonGuardianProps {
     stackName: string;
     projectPrefix: string;
-    construct: cdk.Construct;
+    construct: Construct;
     env: cdk.Environment;
     variables: any;
 }

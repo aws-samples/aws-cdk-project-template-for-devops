@@ -16,8 +16,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as cdk from '@aws-cdk/core';
-import * as s3 from '@aws-cdk/aws-s3'
+import { Construct } from 'constructs';
+import * as cdk from 'aws-cdk-lib';
+import * as s3 from 'aws-cdk-lib/aws-s3'
 
 import { CommonHelper, ICommonHelper } from '../../common/common-helper'
 import { CommonGuardian, ICommonGuardian } from '../../common/common-guardian'
@@ -31,7 +32,7 @@ export interface ConstructCommonProps {
     variables?: any;
 }
 
-export class BaseConstruct extends cdk.Construct implements ICommonHelper, ICommonGuardian  {
+export class BaseConstruct extends Construct implements ICommonHelper, ICommonGuardian  {
     protected stackConfig: any;
     protected projectPrefix: string;
     protected commonProps: ConstructCommonProps;
@@ -39,7 +40,7 @@ export class BaseConstruct extends cdk.Construct implements ICommonHelper, IComm
     private commonHelper: ICommonHelper;
     private commonGuardian: ICommonGuardian;
 
-    constructor(scope: cdk.Construct, id: string, props: ConstructCommonProps) {
+    constructor(scope: Construct, id: string, props: ConstructCommonProps) {
         super(scope, id);
 
         this.stackConfig = props.stackConfig;

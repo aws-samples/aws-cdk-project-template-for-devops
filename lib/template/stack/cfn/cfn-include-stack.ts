@@ -1,4 +1,4 @@
-import * as cfn_inc from '@aws-cdk/cloudformation-include';
+import * as cfn_inc from 'aws-cdk-lib/cloudformation-include';
 
 import * as base from '../base/base-stack';
 import { AppContext } from '../../app-context';

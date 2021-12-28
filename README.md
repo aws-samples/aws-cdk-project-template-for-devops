@@ -319,8 +319,8 @@ This stack creates a VPC using CloudFormation yaml file. For that reason, it inh
 - Stack Implementation
 
 ```typescript
-import * as ec2 from '@aws-cdk/aws-ec2';
-import * as cfn_inc from '@aws-cdk/cloudformation-include';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as cfn_inc from 'aws-cdk-lib/cloudformation-include';
 
 import * as base from '../../lib/template/stack/cfn/cfn-include-stack';
 import { AppContext } from '../../lib/template/app-context';
@@ -389,9 +389,9 @@ And database parameters are saved through `putParateter` method, which will save
 - Stack Implementation
   
 ```typescript
-import * as cdk from '@aws-cdk/core';
-import * as ec2 from '@aws-cdk/aws-ec2';
-import * as rds from '@aws-cdk/aws-rds';
+import * as cdk from 'aws-cdk-lib';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as rds from 'aws-cdk-lib/aws-rds';
 
 import * as base from '../../lib/template/stack/vpc/vpc-base-stack';
 import { AppContext } from '../../lib/template/app-context';
@@ -468,8 +468,8 @@ This stack just creates a Cloud9 EC2 instance in the first publict subent of VPC
 - Stack Implementation
 
 ```typescript
-import * as ec2 from '@aws-cdk/aws-ec2';
-import * as cloud9 from '@aws-cdk/aws-cloud9';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as cloud9 from 'aws-cdk-lib/aws-cloud9';
 
 import * as base from '../../lib/template/stack/vpc/vpc-base-stack';
 import { AppContext } from '../../lib/template/app-context';
@@ -544,10 +544,10 @@ This stack creates ECS Cluster/Serice/Task. Since it inherits from VpcBastStack,
 - Stack Implementation
 
 ```typescript
-import * as ec2 from '@aws-cdk/aws-ec2';
-import * as ecs from '@aws-cdk/aws-ecs';
-import * as sm from '@aws-cdk/aws-secretsmanager';
-import * as ecsPatterns from '@aws-cdk/aws-ecs-patterns';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as ecs from 'aws-cdk-lib/aws-ecs';
+import * as sm from 'aws-cdk-lib/aws-secretsmanager';
+import * as ecsPatterns from 'aws-cdk-lib/aws-ecs-patterns';
 
 import * as base from '../../lib/template/stack/vpc/vpc-base-stack';
 import { AppContext } from '../../lib/template/app-context';

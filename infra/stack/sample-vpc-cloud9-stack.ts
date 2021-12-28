@@ -1,6 +1,6 @@
 
-import * as ec2 from '@aws-cdk/aws-ec2';
-import * as cloud9 from '@aws-cdk/aws-cloud9';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as cloud9 from 'aws-cdk-lib/aws-cloud9';
 
 import * as base from '../../lib/template/stack/vpc/vpc-base-stack';
 import { AppContext } from '../../lib/template/app-context';

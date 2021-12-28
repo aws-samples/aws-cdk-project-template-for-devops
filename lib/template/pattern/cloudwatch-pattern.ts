@@ -17,9 +17,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as cdk from '@aws-cdk/core';
-import * as cloudwatch from '@aws-cdk/aws-cloudwatch';
-import { IWidget } from "@aws-cdk/aws-cloudwatch";
+import { Construct } from 'constructs';
+import * as cdk from 'aws-cdk-lib';
+import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
+import { IWidget } from "aws-cdk-lib/aws-cloudwatch";
 
 export interface CloudWatchPatternProps {
     readonly projectFullName: string;
@@ -27,12 +28,12 @@ export interface CloudWatchPatternProps {
     readonly period: cdk.Duration;
 }
 
-export class CloudWatchPattern extends cdk.Construct {
+export class CloudWatchPattern extends Construct {
 
     private dashboard: cloudwatch.Dashboard;
     private props: CloudWatchPatternProps;
 
-    constructor(scope: cdk.Construct, id: string, props: CloudWatchPatternProps) {
+    constructor(scope: Construct, id: string, props: CloudWatchPatternProps) {
         super(scope, id);
         this.props = props;
 

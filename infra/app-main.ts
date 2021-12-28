@@ -21,6 +21,6 @@ try {
     if (error instanceof AppContextError) {
         console.error('AppContextError:', error.message);
     } else {
-        console.error('not-defined-error');
+        console.error('not-defined-error', error);
     }
 }

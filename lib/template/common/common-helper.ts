@@ -16,8 +16,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as cdk from '@aws-cdk/core';
-import * as ssm from '@aws-cdk/aws-ssm'
+import { Construct } from 'constructs';
+import * as cdk from 'aws-cdk-lib';
+import * as ssm from 'aws-cdk-lib/aws-ssm'
 
 
 export interface ICommonHelper {
@@ -32,7 +33,7 @@ export interface ICommonHelper {
 export interface CommonHelperProps {
     stackName: string;
     projectPrefix: string;
-    construct: cdk.Construct;
+    construct: Construct;
     env: cdk.Environment;
     variables: any;
 }

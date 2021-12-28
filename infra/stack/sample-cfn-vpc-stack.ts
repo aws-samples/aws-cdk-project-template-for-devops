@@ -1,5 +1,5 @@
-import * as ec2 from '@aws-cdk/aws-ec2';
-import * as cfn_inc from '@aws-cdk/cloudformation-include';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as cfn_inc from 'aws-cdk-lib/cloudformation-include';
 
 import * as base from '../../lib/template/stack/cfn/cfn-include-stack';
 import { AppContext } from '../../lib/template/app-context';
