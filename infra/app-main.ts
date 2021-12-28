@@ -19,8 +19,8 @@ try {
     new SampleVpcEcsStack(appContext, appContext.appConfig.Stack.SampleVpcEcs);
 } catch (error) {
     if (error instanceof AppContextError) {
-        console.error('AppContextError:', error.message);
+        console.error('[AppContextError]:', error.message);
     } else {
-        console.error('not-defined-error');
+        console.error('[Error]: not-handled-error', error);
     }
 }
