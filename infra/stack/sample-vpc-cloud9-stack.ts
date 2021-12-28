@@ -24,16 +24,13 @@ export class SampleVpcCloud9Stack extends base.VpcBaseStack {
     onPostConstructor(baseVpc?: ec2.IVpc) {
 
         const subnet = baseVpc?.publicSubnets[0];
-        
-        new cloud9.Ec2Environment(this, 'Cloud9Env2', {
-            vpc: baseVpc!,
-            ec2EnvironmentName: `${this.projectPrefix}-DatabaseConnection`,
-            instanceType: new ec2.InstanceType('t3.large'),
-            subnetSelection: {
-                subnets: [subnet!]
-            }
-        });
 
+        new cloud9.CfnEnvironmentEC2(this, 'Cloud9Env2', {
+            name: `${this.projectPrefix}-DatabaseConnection`,
+            instanceType: new ec2.InstanceType('t3.large').toString(),
+            subnetId: subnet?.subnetId
+        });
+        
         const databaseSecurityGroup = ec2.SecurityGroup.fromSecurityGroupId(this, 'DatabaseSecurityGroup', this.getParameter('DatabaseSecurityGroup'));
         databaseSecurityGroup.addIngressRule(ec2.Peer.ipv4(subnet?.ipv4CidrBlock!), ec2.Port.tcp(3306), 'from cloud9 subnet');
     }
