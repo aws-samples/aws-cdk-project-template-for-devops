@@ -4,7 +4,7 @@ This repository provides best practices and template framework for developing AW
 
 This template framework suports both CDK Ver1 and CDK Ver2.
 
-- AWS CDK Version1: [release_cdk_ver2 branch](https://github.com/aws-samples/aws-cdk-project-template-for-devops/tree/release_cdk_v1)
+- AWS CDK Version1: [release_cdk_ver1 branch](https://github.com/aws-samples/aws-cdk-project-template-for-devops/tree/release_cdk_v1)
 - AWS CDK Version2: [release_cdk_ver2 branch](https://github.com/aws-samples/aws-cdk-project-template-for-devops/tree/release_cdk_v2)
 
 ## Agenda
