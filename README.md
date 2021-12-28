@@ -28,6 +28,11 @@ This repository provides best practices and template framework for developing AW
 
  [AWS Cloud Development Kit(CDK)](https://aws.amazon.com/cdk) is an open source software development framework to define your cloud application resources using familiar programming languages. After coding using CDK Construct and Stack, if you run it through CDK CLI, it is finally compiled and deployed through AWS CloudFormation.
 
+This template framework suports both CDK Ver1 and CDK Ver2.
+
+- AWS CDK Version1: [release_cdk_ver2 branch](https://github.com/aws-samples/aws-cdk-project-template-for-devops/tree/release_cdk_v1)
+- AWS CDK Version2: [release_cdk_ver2 branch](https://github.com/aws-samples/aws-cdk-project-template-for-devops/tree/release_cdk_v2)
+
 ![1. AWSCDKIntro](docs/asset/aws_cdk_intro.png)
 
  AWS CDK supports TypeScript, JavaScript, Python, Java, C#/.Net, and (in developer preview) Go. The template codes of this repository are implemented in **TypeScript**, because it clearly defines restrictions on types. Restrictions on types provide automated/powerful guide within IDE.
@@ -664,7 +669,9 @@ SELECT * FROM Items;
 Finally we can call internal REST APIs in `Cloud9`. Execute the following commands in `Cloud9`:
 
 ```bash
-curl ALB_DNS_NAME
+export ALB_DNS_NAME=xxxxxxxxxxxxxxxx.region.elb.amazonaws.com
+
+curl $ALB_DNS_NAME
 ...
 ...
 {"Health": "Good"}
@@ -673,13 +680,13 @@ curl ALB_DNS_NAME
 Or
 
 ```bash
-curl ALB_DNS_NAME/items
+curl $ALB_DNS_NAME/items
 ...
 ...
 {"items": [[1,"name-001"]]}
 ```
 
-Where `ALB_DNS_NAME` is found in `LoadBalancers` in `EC2` web console.
+Where `ALB_DNS_NAME` is found in `LoadBalancers` DNS name in `EC2` web console.
 
 #### How to clean up
 
