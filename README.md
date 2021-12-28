@@ -2,6 +2,13 @@
 
 This repository provides best practices and template framework for developing AWS Cloud Development Kit(CDK)-based applications effectively, quickly and collaboratively. In detail, practical approaches such as how to deploy to multi-environment, how to organize directories and how to manage dependencies between stacks will be introduced, and template codes are provided to support them. Gradually, these template codes will be further expanded to support various DevOps scenario.
 
+This template framework suports both CDK Ver1 and CDK Ver2.
+
+- AWS CDK Version1: [release_cdk_ver2 branch](https://github.com/aws-samples/aws-cdk-project-template-for-devops/tree/release_cdk_v1)
+- AWS CDK Version2: [release_cdk_ver2 branch](https://github.com/aws-samples/aws-cdk-project-template-for-devops/tree/release_cdk_v2)
+
+## Agenda
+
 1. [AWS CDK Introduction](#1-aws-cdk-introduction)
 
 2. [Prerequisites](#2-prerequisites)
@@ -27,11 +34,6 @@ This repository provides best practices and template framework for developing AW
 ## 1. AWS CDK Introduction
 
  [AWS Cloud Development Kit(CDK)](https://aws.amazon.com/cdk) is an open source software development framework to define your cloud application resources using familiar programming languages. After coding using CDK Construct and Stack, if you run it through CDK CLI, it is finally compiled and deployed through AWS CloudFormation.
-
-This template framework suports both CDK Ver1 and CDK Ver2.
-
-- AWS CDK Version1: [release_cdk_ver2 branch](https://github.com/aws-samples/aws-cdk-project-template-for-devops/tree/release_cdk_v1)
-- AWS CDK Version2: [release_cdk_ver2 branch](https://github.com/aws-samples/aws-cdk-project-template-for-devops/tree/release_cdk_v2)
 
 ![1. AWSCDKIntro](docs/asset/aws_cdk_intro.png)
 
