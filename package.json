@@ -11,22 +11,22 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "1.123.0",
+    "@aws-cdk/assert": "1.138.0",
     "@types/jest": "^26.0.10",
     "@types/node": "10.17.27",
     "jest": "^26.4.2",
     "ts-jest": "^26.2.0",
-    "aws-cdk": "1.123.0",
+    "aws-cdk": "1.138.0",
     "ts-node": "^9.0.0",
     "typescript": "~3.9.7"
   },
   "dependencies": {
-    "@aws-cdk/aws-ecs-patterns": "1.123.0",
-    "@aws-cdk/cloudformation-include": "1.123.0",
-    "@aws-cdk/aws-lambda-event-sources": "1.123.0",
-    "@aws-cdk/aws-lambda": "1.123.0",
-    "@aws-cdk/aws-iam": "1.123.0",
-    "@aws-cdk/core": "1.123.0",
+    "@aws-cdk/aws-ecs-patterns": "1.138.0",
+    "@aws-cdk/cloudformation-include": "1.138.0",
+    "@aws-cdk/aws-lambda-event-sources": "1.138.0",
+    "@aws-cdk/aws-lambda": "1.138.0",
+    "@aws-cdk/aws-iam": "1.138.0",
+    "@aws-cdk/core": "1.138.0",
     "env-var": "6.3.0",
     "source-map-support": "^0.5.16"
   }
