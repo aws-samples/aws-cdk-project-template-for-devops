@@ -4,8 +4,8 @@ This repository provides best practices and template framework for developing AW
 
 This template framework suports both CDK Ver1 and CDK Ver2.
 
-- AWS CDK Version1: [release_cdk_ver1 branch](https://github.com/aws-samples/aws-cdk-project-template-for-devops/tree/release_cdk_v1)
-- AWS CDK Version2: [release_cdk_ver2 branch](https://github.com/aws-samples/aws-cdk-project-template-for-devops/tree/release_cdk_v2)
+- AWS CDK Version1 branch: [release_cdk_v1](https://github.com/aws-samples/aws-cdk-project-template-for-devops/tree/release_cdk_v1)
+- AWS CDK Version2 branch: [release_cdk_v2](https://github.com/aws-samples/aws-cdk-project-template-for-devops/tree/release_cdk_v2)
 
 ## Agenda
 
@@ -153,8 +153,8 @@ The final project part consists of:
 ```json
 {
     "Project": {
-        "Name": "HelloWorld", <----- Essential: your project name, all stacks wil be prefixed with [Project.Name+Project.Stage]
-        "Stage": "Demo",      <----- Essential: your project stage, all stacks wil be prefixed with [Project.Name+Project.Stage]
+        "Name": "HelloWorld", <----- Essential: your project name, all stacks will be prefixed with [Project.Name+Project.Stage]
+        "Stage": "Demo",      <----- Essential: your project stage, all stacks will be prefixed with [Project.Name+Project.Stage]
         "Account": "75157*******", <----- Essential: update according to your AWS Account
         "Region": "us-east-2",     <----- Essential: update according to your target resion
         "Profile": "cdk-demo"      <----- Essential: AWS Profile, keep empty string if no profile configured
