@@ -23,7 +23,7 @@ import * as iam from '@aws-cdk/aws-iam';
 import * as s3 from '@aws-cdk/aws-s3';
 import { S3EventSource } from '@aws-cdk/aws-lambda-event-sources';
 
-import { BaseConstruct, ConstructCommonProps } from '../construct/base/base-construct';
+import { BaseConstruct, ConstructCommonProps } from '../base/base-construct';
 
 export interface LambdaSimplePatternProps extends ConstructCommonProps {
     baseName: string;

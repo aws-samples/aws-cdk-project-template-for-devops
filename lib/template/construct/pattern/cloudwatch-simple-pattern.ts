@@ -22,7 +22,7 @@ import { Construct } from '@aws-cdk/core';
 import * as cloudwatch from '@aws-cdk/aws-cloudwatch';
 import { IWidget } from "@aws-cdk/aws-cloudwatch";
 
-import { BaseConstruct, ConstructCommonProps } from '../construct/base/base-construct';
+import { BaseConstruct, ConstructCommonProps } from '../base/base-construct';
 
 export interface CloudWatchSimplePatternProps extends ConstructCommonProps {
     readonly dashboardName: string;
