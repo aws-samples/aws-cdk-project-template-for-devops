@@ -21,23 +21,24 @@ import * as cdk from '@aws-cdk/core';
 import * as cloudwatch from '@aws-cdk/aws-cloudwatch';
 import { IWidget } from "@aws-cdk/aws-cloudwatch";
 
-export interface CloudWatchPatternProps {
-    readonly projectFullName: string;
+import { BaseConstruct, ConstructCommonProps } from '../construct/base/base-construct';
+
+export interface CloudWatchSimplePatternProps extends ConstructCommonProps {
     readonly dashboardName: string;
-    readonly period: cdk.Duration;
+    readonly commonPeriod: cdk.Duration;
 }
 
-export class CloudWatchPattern extends cdk.Construct {
+export class CloudWatchSimplePattern extends BaseConstruct {
 
     private dashboard: cloudwatch.Dashboard;
-    private props: CloudWatchPatternProps;
+    private props: CloudWatchSimplePatternProps;
 
-    constructor(scope: cdk.Construct, id: string, props: CloudWatchPatternProps) {
-        super(scope, id);
+    constructor(scope: cdk.Construct, id: string, props: CloudWatchSimplePatternProps) {
+        super(scope, id, props);
         this.props = props;
 
         this.dashboard = new cloudwatch.Dashboard(this, props.dashboardName, {
-            dashboardName: `${props.projectFullName}-${props.dashboardName}`,
+            dashboardName: `${props.projectPrefix}-${props.dashboardName}`,
         });
     }
 
@@ -102,7 +103,7 @@ export class CloudWatchPattern extends cdk.Construct {
             dimensions: dimensions,
             statistic: options.statistic,
             unit: options.unit,
-            period: this.props.period,
+            period: this.props.commonPeriod,
             label: options.label != undefined ? options.label : metricName,
             ...options
         });
@@ -124,7 +125,7 @@ export class CloudWatchPattern extends cdk.Construct {
             },
             statistic: options.statistic, // Sum
             unit: options.unit, //cloudwatch.Unit.COUNT
-            period: this.props.period,
+            period: this.props.commonPeriod,
             label: options.label != undefined ? options.label : metricName,
             ...options
         });
@@ -146,7 +147,7 @@ export class CloudWatchPattern extends cdk.Construct {
             },
             statistic: options.statistic, // Sum
             unit: options.unit, //cloudwatch.Unit.COUNT
-            period: this.props.period,
+            period: this.props.commonPeriod,
             label: options.label != undefined ? options.label : metricName,
             ...options
         });
@@ -160,7 +161,7 @@ export class CloudWatchPattern extends cdk.Construct {
                 StreamName: streamName
             },
             unit: cloudwatch.Unit.COUNT,
-            period: this.props.period,
+            period: this.props.commonPeriod,
             label: options.label != undefined ? options.label : metricName,
             ...options
         });
@@ -177,7 +178,7 @@ export class CloudWatchPattern extends cdk.Construct {
                 },
                 statistic: 'Average',
                 unit: cloudwatch.Unit.PERCENT,
-                period: this.props.period,
+                period: this.props.commonPeriod,
                 label: options.label != undefined ? options.label : metricName,
                 ...options
             });
@@ -197,7 +198,7 @@ export class CloudWatchPattern extends cdk.Construct {
                 },
                 statistic: options.statistic, // Sum, Average
                 unit: options.unit, //cloudwatch.Unit.COUNT Milliseconds
-                period: this.props.period,
+                period: this.props.commonPeriod,
                 label: options.label != undefined ? options.label : metricName,
                 ...options
             });
@@ -216,7 +217,7 @@ export class CloudWatchPattern extends cdk.Construct {
             },
             statistic: options.statistic,
             unit: options.unit,
-            period: this.props.period,
+            period: this.props.commonPeriod,
             label: options.label != undefined ? options.label : metricName,
             color: options.color,
             ...options
@@ -232,7 +233,7 @@ export class CloudWatchPattern extends cdk.Construct {
             },
             statistic: options.statistic,
             unit: options.unit,
-            period: this.props.period,
+            period: this.props.commonPeriod,
             label: options.label != undefined ? options.label : metricName,
             color: options.color,
             ...options
@@ -248,7 +249,7 @@ export class CloudWatchPattern extends cdk.Construct {
             },
             statistic: options.statistic,
             unit: options.unit,
-            period: this.props.period,
+            period: this.props.commonPeriod,
             label: options.label != undefined ? options.label : metricName,
             ...options
         });
@@ -263,7 +264,7 @@ export class CloudWatchPattern extends cdk.Construct {
             },
             statistic: options.statistic,
             unit: options.unit,
-            period: this.props.period,
+            period: this.props.commonPeriod,
             label: options.label != undefined ? options.label : metricName,
             ...options
         });
@@ -276,7 +277,7 @@ export class CloudWatchPattern extends cdk.Construct {
             dimensions: dimensions,
             statistic: options.statistic,
             unit: options.unit,
-            period: this.props.period,
+            period: this.props.commonPeriod,
             label: options.label != undefined ? options.label : metricName,
             ...options
         });

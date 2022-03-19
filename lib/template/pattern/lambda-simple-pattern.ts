@@ -22,8 +22,9 @@ import * as iam from '@aws-cdk/aws-iam';
 import * as s3 from '@aws-cdk/aws-s3';
 import { S3EventSource } from '@aws-cdk/aws-lambda-event-sources';
 
-export interface LambdaPatternConstructProps {
-    projectFullName: string;
+import { BaseConstruct, ConstructCommonProps } from '../construct/base/base-construct';
+
+export interface LambdaSimplePatternProps extends ConstructCommonProps {
     baseName: string;
     lambdaPath: string;
     policies: string[] | iam.PolicyStatement[];
@@ -36,21 +37,21 @@ export interface LambdaPatternConstructProps {
     bucketSuffix?: string[];
 }
 
-export class LambdaPattern extends cdk.Construct {
+export class LambdaSimplePattern extends BaseConstruct {
     public readonly lambdaFunction: lambda.Function;
     public readonly lambdaRole: iam.Role;
 
-    constructor(scope: cdk.Construct, id: string, props: LambdaPatternConstructProps) {
-        super(scope, id);
+    constructor(scope: cdk.Construct, id: string, props: LambdaSimplePatternProps) {
+        super(scope, id, props);
 
-        const lambdaName: string = `${props.projectFullName}-${props.baseName}-Lambda`;
-        const roleName: string = `${props.projectFullName}-${props.baseName}-Lambda-Role`;
+        const lambdaName: string = `${props.projectPrefix}-${props.baseName}-Lambda`;
+        const roleName: string = `${props.projectPrefix}-${props.baseName}-Lambda-Role`;
 
         this.lambdaRole = this.createRole(roleName, props.policies);
         this.lambdaFunction = this.createLambda(lambdaName, props.lambdaPath, this.lambdaRole, props);
     }
 
-    private createLambda(lambdaName: string, lambdaPath: string, lambdaRole: iam.Role, props: LambdaPatternConstructProps): lambda.Function {
+    private createLambda(lambdaName: string, lambdaPath: string, lambdaRole: iam.Role, props: LambdaSimplePatternProps): lambda.Function {
         var layers = this.loadLayers(lambdaName, props.layerArns!);
 
         const lambdaFunction = new lambda.Function(this, lambdaName, {
