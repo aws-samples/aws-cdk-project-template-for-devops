@@ -17,12 +17,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { Construct } from 'constructs';
 import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
 import { IWidget } from "aws-cdk-lib/aws-cloudwatch";
 
-import { BaseConstruct, ConstructCommonProps } from '../construct/base/base-construct';
+import { BaseConstruct, ConstructCommonProps } from '../base/base-construct';
 
 export interface CloudWatchSimplePatternProps extends ConstructCommonProps {
     readonly dashboardName: string;
