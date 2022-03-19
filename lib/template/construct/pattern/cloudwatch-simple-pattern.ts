@@ -18,6 +18,7 @@
  */
 
 import * as cdk from '@aws-cdk/core';
+import { Construct } from '@aws-cdk/core';
 import * as cloudwatch from '@aws-cdk/aws-cloudwatch';
 import { IWidget } from "@aws-cdk/aws-cloudwatch";
 
@@ -33,7 +34,7 @@ export class CloudWatchSimplePattern extends BaseConstruct {
     private dashboard: cloudwatch.Dashboard;
     private props: CloudWatchSimplePatternProps;
 
-    constructor(scope: cdk.Construct, id: string, props: CloudWatchSimplePatternProps) {
+    constructor(scope: Construct, id: string, props: CloudWatchSimplePatternProps) {
         super(scope, id, props);
         this.props = props;
 

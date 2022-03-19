@@ -17,6 +17,7 @@
  */
 
 import * as cdk from '@aws-cdk/core';
+import { Construct } from '@aws-cdk/core';
 import * as lambda from '@aws-cdk/aws-lambda';
 import * as iam from '@aws-cdk/aws-iam';
 import * as s3 from '@aws-cdk/aws-s3';
@@ -41,7 +42,7 @@ export class LambdaSimplePattern extends BaseConstruct {
     public readonly lambdaFunction: lambda.Function;
     public readonly lambdaRole: iam.Role;
 
-    constructor(scope: cdk.Construct, id: string, props: LambdaSimplePatternProps) {
+    constructor(scope: Construct, id: string, props: LambdaSimplePatternProps) {
         super(scope, id, props);
 
         const lambdaName: string = `${props.projectPrefix}-${props.baseName}-Lambda`;
