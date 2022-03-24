@@ -126,23 +126,13 @@ export class AppContext {
             let oldValue = '';
             const newValue: string = this.cdkApp.node.tryGetContext(key);
 
-            if (newValue != undefined) {
-                if (jsonKeys.length == 1) {
-                    oldValue = appConfig[jsonKeys[0]];
-                    appConfig[jsonKeys[0]] = newValue;
-                } else if (jsonKeys.length == 2) {
-                    oldValue = appConfig[jsonKeys[0]][jsonKeys[1]]
-                    appConfig[jsonKeys[0]][jsonKeys[1]] = newValue;
-                } else if (jsonKeys.length == 3) {
-                    oldValue = appConfig[jsonKeys[0]][jsonKeys[1]][jsonKeys[2]];
-                    appConfig[jsonKeys[0]][jsonKeys[1]][jsonKeys[2]] = newValue;
-                } else if (jsonKeys.length == 4) {
-                    oldValue = appConfig[jsonKeys[0]][jsonKeys[1]][jsonKeys[2]][jsonKeys[3]];
-                    appConfig[jsonKeys[0]][jsonKeys[1]][jsonKeys[2]][jsonKeys[3]] = newValue;
-                } else if (jsonKeys.length == 5) {
-                    oldValue = appConfig[jsonKeys[0]][jsonKeys[1]][jsonKeys[2]][jsonKeys[3]][jsonKeys[4]];
-                    appConfig[jsonKeys[0]][jsonKeys[1]][jsonKeys[2]][jsonKeys[3]][jsonKeys[4]] = newValue;
-                }
+            if (newValue != undefined && jsonKeys.length > 0) {
+                oldValue = jsonKeys.reduce( (reducer:any, pointer:string)=> (reducer==undefined)?undefined:reducer[pointer], appConfig);
+                jsonKeys.reduce( (reducer:any, pointer:string, n:number)=>{
+                    if(n == jsonKeys.length-1) reducer[pointer] = newValue;
+                    else if(reducer[pointer]==undefined) reducer[pointer] = {};
+                    return reducer[pointer];
+                }, appConfig);
 
                 console.info(`updateContextArgs: ${key} = ${oldValue}-->${newValue}`);
             }
