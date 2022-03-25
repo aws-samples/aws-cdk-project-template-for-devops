@@ -123,18 +123,23 @@ export class AppContext {
     private updateContextArgs(appConfig: any, contextArgs: string[]) {
         for (let key of contextArgs) {
             const jsonKeys = key.split('.');
-            let oldValue = '';
+            let oldValue = undefined;
             const newValue: string = this.cdkApp.node.tryGetContext(key);
-
+    
             if (newValue != undefined && jsonKeys.length > 0) {
-                oldValue = jsonKeys.reduce( (reducer:any, pointer:string)=> (reducer==undefined)?undefined:reducer[pointer], appConfig);
-                jsonKeys.reduce( (reducer:any, pointer:string, n:number)=>{
-                    if(n == jsonKeys.length-1) reducer[pointer] = newValue;
-                    else if(reducer[pointer]==undefined) reducer[pointer] = {};
+                try {
+                    oldValue = jsonKeys.reduce((reducer: any, pointer: string) => reducer.hasOwnProperty(pointer) ? reducer[pointer] : undefined, appConfig);
+                } catch(e) {
+                    console.error(`[ERROR] updateContextArgs: This key[${key}] is an undefined value in Json-Config file.\n`, e);
+                    throw e;
+                }
+    
+                jsonKeys.reduce((reducer: any, pointer: string, count: number) => {
+                    if (count == jsonKeys.length - 1) reducer[pointer] = newValue;
                     return reducer[pointer];
                 }, appConfig);
-
-                console.info(`updateContextArgs: ${key} = ${oldValue}-->${newValue}`);
+    
+                console.info(`[INFO] updateContextArgs: Updated ${key} = ${oldValue}-->${newValue}`);
             }
         }
     }
