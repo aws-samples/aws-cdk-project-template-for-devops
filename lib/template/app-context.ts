@@ -41,8 +41,8 @@ export class AppContext {
     public readonly appConfig: AppConfig;
     public readonly stackCommonProps: StackCommonProps;
 
-    constructor(props: AppContextProps) {
-        this.cdkApp = new cdk.App();
+    constructor(props: AppContextProps, cdkApp?: cdk.App) {
+        this.cdkApp = cdkApp ? cdkApp : new cdk.App();
 
         try {
             const appConfigFile = this.findAppConfigFile(props.appConfigFileKey);
@@ -56,7 +56,7 @@ export class AppContext {
         } catch (e) {
             console.error(`==> CDK App-Config File is empty, 
             set up your environment variable(Usage: export ${props.appConfigFileKey}=config/app-config-xxx.json) 
-            or append inline-argurment(Usage: cdk list --context ${props.appConfigFileKey}=config/app-config-xxx.json)`);
+            or append inline-argurment(Usage: cdk list --context ${props.appConfigFileKey}=config/app-config-xxx.json)`, e);
             throw new AppContextError('Fail to find App-Config json file');
         }
     }
