@@ -1,0 +1,15 @@
+{
+    "Project": {
+        "Name": "HelloWorld",
+        "Stage": "Demo",
+        "Account": "75157*******",
+        "Region": "us-east-2",
+        "Profile": "cdk-demo"
+    },
+
+    "aa": {
+        "bb": {
+            "cc": "here"
+        }
+    }
+}
