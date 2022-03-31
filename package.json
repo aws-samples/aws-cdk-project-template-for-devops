@@ -1,8 +1,8 @@
 {
-  "name": "mlops-pipeline",
+  "name": "cdk-project-template",
   "version": "0.1.0",
   "bin": {
-    "mlops-pipeline": "infra/app-main.js"
+    "cdk-project-template": "infra/app-main.js"
   },
   "scripts": {
     "build": "tsc",
@@ -21,6 +21,10 @@
     "typescript": "~3.9.7"
   },
   "dependencies": {
+    "@aws-cdk/aws-codecommit": "1.138.0",
+    "@aws-cdk/aws-codebuild": "1.138.0",
+    "@aws-cdk/aws-codepipeline": "1.138.0",
+    "@aws-cdk/aws-codepipeline-actions": "1.138.0",
     "@aws-cdk/aws-ecs-patterns": "1.138.0",
     "@aws-cdk/cloudformation-include": "1.138.0",
     "@aws-cdk/aws-lambda-event-sources": "1.138.0",
