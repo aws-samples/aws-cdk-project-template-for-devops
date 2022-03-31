@@ -1,8 +1,8 @@
 {
-  "name": "mlops-pipeline",
+  "name": "cdk-project-template",
   "version": "0.1.0",
   "bin": {
-    "mlops-pipeline": "infra/app-main.js"
+    "cdk-project-template": "infra/app-main.js"
   },
   "scripts": {
     "build": "tsc",
