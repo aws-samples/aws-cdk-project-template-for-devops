@@ -65,12 +65,7 @@ export class BaseConstruct extends cdk.Construct implements ICommonHelper, IComm
     }
 
     findEnumType<T>(enumType: T, target: string): T[keyof T] {
-        try{
-            return this.commonHelper.findEnumType(enumType, target);
-        }
-        catch(error) {
-            throw new Error(`[ERROR] findEnumType: fail to find enum type: ${target}`);
-        }
+        return this.commonHelper.findEnumType(enumType, target);
     }
 
     exportOutput(key: string, value: string) {

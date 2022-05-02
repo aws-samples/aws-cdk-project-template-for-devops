@@ -20,7 +20,7 @@ import * as cdk from '@aws-cdk/core';
 import * as s3 from '@aws-cdk/aws-s3'
 
 import { AppContext } from '../../app-context'
-import { AppConfig } from '../../app-config'
+import { AppConfig, StackConfig } from '../../app-config'
 import { CommonHelper, ICommonHelper } from '../../common/common-helper'
 import { CommonGuardian, ICommonGuardian } from '../../common/common-guardian'
 
@@ -35,7 +35,7 @@ export interface StackCommonProps extends cdk.StackProps {
 }
 
 export class BaseStack extends cdk.Stack implements ICommonHelper, ICommonGuardian {
-    protected stackConfig: any;
+    protected stackConfig: StackConfig;
     protected projectPrefix: string;
     protected commonProps: StackCommonProps;
 
@@ -43,10 +43,11 @@ export class BaseStack extends cdk.Stack implements ICommonHelper, ICommonGuardi
     private commonGuardian: ICommonGuardian;
 
     constructor(appContext: AppContext, stackConfig: any) {
-        super(appContext.cdkApp, stackConfig.Name, appContext.stackCommonProps);
+        let newProps = BaseStack.getStackCommonProps(appContext, stackConfig);
+        super(appContext.cdkApp, stackConfig.Name, newProps);
 
         this.stackConfig = stackConfig;
-        this.commonProps = appContext.stackCommonProps;
+        this.commonProps = newProps;
         this.projectPrefix = appContext.stackCommonProps.projectPrefix;
 
         this.commonHelper = new CommonHelper({
@@ -66,20 +67,38 @@ export class BaseStack extends cdk.Stack implements ICommonHelper, ICommonGuardi
         });
     }
 
+    private static getStackCommonProps(appContext: AppContext, stackConfig: any): StackCommonProps{
+        let newProps = appContext.stackCommonProps;
+        if (stackConfig.UpdateRegionName) {
+            console.log(`[INFO] Region is updated: ${stackConfig.Name} ->> ${stackConfig.UpdateRegionName}`);
+            newProps = {
+                ...appContext.stackCommonProps,
+                env: {
+                    region: stackConfig.UpdateRegionName,
+                    account: appContext.appConfig.Project.Account
+                }
+            };
+        } else {
+            // console.log('not update region')
+        }
+
+        return newProps;
+    }
+
     findEnumType<T>(enumType: T, target: string): T[keyof T] {
         return this.commonHelper.findEnumType(enumType, target);
     }
 
-    exportOutput(key: string, value: string) {
-        this.commonHelper.exportOutput(key, value);
+    exportOutput(key: string, value: string, prefixEnable=true, prefixCustomName?: string) {
+        this.commonHelper.exportOutput(key, value, prefixEnable, prefixCustomName);
     }
 
-    putParameter(paramKey: string, paramValue: string): string {
-        return this.commonHelper.putParameter(paramKey, paramValue);
+    putParameter(paramKey: string, paramValue: string, prefixEnable=true, prefixCustomName?: string): string {
+        return this.commonHelper.putParameter(paramKey, paramValue, prefixEnable, prefixCustomName);
     }
 
-    getParameter(paramKey: string): string {
-        return this.commonHelper.getParameter(paramKey);
+    getParameter(paramKey: string, prefixEnable=true, prefixCustomName?: string): string {
+        return this.commonHelper.getParameter(paramKey, prefixEnable, prefixCustomName);
     }
 
     putVariable(variableKey: string, variableValue: string) {
@@ -90,11 +109,11 @@ export class BaseStack extends cdk.Stack implements ICommonHelper, ICommonGuardi
         return this.commonHelper.getVariable(variableKey);
     }
 
-    createS3BucketName(baseName: string): string {
-        return this.commonGuardian.createS3BucketName(baseName);
+    createS3BucketName(baseName: string, suffix?: boolean): string {
+        return this.commonGuardian.createS3BucketName(baseName, suffix);
     }
 
-    createS3Bucket(baseName: string, encryption?: s3.BucketEncryption, versioned?: boolean): s3.Bucket {
-        return this.commonGuardian.createS3Bucket(baseName, encryption, versioned);
+    createS3Bucket(baseName: string, suffix?: boolean, encryption?: s3.BucketEncryption, versioned?: boolean): s3.Bucket {
+        return this.commonGuardian.createS3Bucket(baseName, suffix, encryption, versioned);
     }
 }

@@ -21,8 +21,8 @@ import * as s3 from '@aws-cdk/aws-s3';
 
 
 export interface ICommonGuardian {
-    createS3BucketName(baseName: string): string;
-    createS3Bucket(baseName: string, encryption?: s3.BucketEncryption, versioned?: boolean): s3.Bucket;
+    createS3BucketName(baseName: string, suffix?: boolean): string;
+    createS3Bucket(baseName: string, suffix?: boolean, encryption?: s3.BucketEncryption, versioned?: boolean): s3.Bucket;
 }
 
 export interface CommonGuardianProps {
@@ -44,16 +44,20 @@ export class CommonGuardian implements ICommonGuardian {
         this.projectPrefix = props.projectPrefix;
     }
 
-    createS3BucketName(baseName: string): string {
-        const suffix: string = `${this.props.env?.region}-${this.props.env?.account?.substr(0, 5)}`
-        return `${this.stackName}-${baseName}-${suffix}`.toLowerCase().replace('_', '-');
+    createS3BucketName(baseName: string, suffix=true): string {
+        if (suffix === undefined || suffix === true) {
+            const finalSuffix = `${this.props.env?.region}-${this.props.env?.account?.substr(0, 5)}`
+            return `${this.stackName}-${baseName}-${finalSuffix}`.toLowerCase().replace('_', '-');
+        } else {
+            return `${this.stackName}-${baseName}`.toLowerCase().replace('_', '-');
+        }
     }
 
-    createS3Bucket(baseName: string, encryption?: s3.BucketEncryption, versioned?: boolean): s3.Bucket {
-        const suffix: string = `${this.props.env?.region}-${this.props.env?.account?.substr(0, 5)}`
+    createS3Bucket(baseName: string, suffix=true, encryption?: s3.BucketEncryption, versioned?: boolean): s3.Bucket {
+        const bucketName = this.createS3BucketName(baseName, suffix);
 
         const s3Bucket = new s3.Bucket(this.props.construct, `${baseName}-bucket`, {
-            bucketName: `${this.stackName}-${baseName}-${suffix}`.toLowerCase().replace('_', '-'),
+            bucketName: bucketName,
             encryption: encryption == undefined ? s3.BucketEncryption.S3_MANAGED : encryption,
             versioned: versioned == undefined ? false : versioned,
             removalPolicy: cdk.RemovalPolicy.RETAIN

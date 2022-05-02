@@ -31,9 +31,16 @@ export class AppContextError extends Error {
     }
 }
 
+export enum ProjectPrefixType {
+    NameStage,
+    NameHyphenStage,
+    Name
+}
+
 export interface AppContextProps {
     appConfigFileKey: string;
     contextArgs?: string[];
+    projectPrefixType?: ProjectPrefixType;
 }
 
 export class AppContext {
@@ -41,8 +48,11 @@ export class AppContext {
     public readonly appConfig: AppConfig;
     public readonly stackCommonProps: StackCommonProps;
 
-    constructor(props: AppContextProps, cdkApp?: cdk.App) {
-        this.cdkApp = cdkApp ? cdkApp : new cdk.App();
+    private readonly appContextProps: AppContextProps;
+
+    constructor(props: AppContextProps) {
+        this.cdkApp = new cdk.App();
+        this.appContextProps = props;
 
         try {
             const appConfigFile = this.findAppConfigFile(props.appConfigFileKey);
@@ -104,7 +114,15 @@ export class AppContext {
     }
 
     private getProjectPrefix(projectName: string, projectStage: string): string {
-        return `${projectName}${projectStage}`;
+        let prefix = `${projectName}${projectStage}`;
+
+        if (this.appContextProps.projectPrefixType === ProjectPrefixType.NameHyphenStage) {
+            prefix = `${projectName}-${projectStage}`;
+        } else if (this.appContextProps.projectPrefixType === ProjectPrefixType.Name) {
+            prefix = projectName;
+        }
+
+        return prefix;
     }
 
     private loadAppConfigFile(filePath: string, contextArgs?: string[]): any {
