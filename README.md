@@ -91,7 +91,7 @@ Default region name [None]: us-east-2
 Default output format [None]: json
 ```
 
-If you don't konw your account number, execute the following command:
+If you don't know your account number, execute the following command:
 
 ```bash
 aws sts get-caller-identity --profile [optional: your-profile]
