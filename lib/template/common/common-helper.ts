@@ -22,9 +22,9 @@ import * as ssm from '@aws-cdk/aws-ssm'
 
 export interface ICommonHelper {
     findEnumType<T>(enumType: T, target: string): T[keyof T];
-    exportOutput(key: string, value: string): void;
-    putParameter(paramKey: string, paramValue: string): string;
-    getParameter(paramKey: string): string;
+    exportOutput(key: string, value: string, prefixEnable?: boolean, prefixCustomName?: string): void;
+    putParameter(paramKey: string, paramValue: string, prefixEnable?: boolean, prefixCustomName?: string): string;
+    getParameter(paramKey: string, prefixEnable?: boolean, prefixCustomName?: string): string;
     putVariable(variableKey: string, variableValue: string): void;
     getVariable(variableKey: string): string;
 }
@@ -61,31 +61,53 @@ export class CommonHelper implements ICommonHelper {
         return enumType[key];
     }
 
-    public exportOutput(key: string, value: string) {
-        new cdk.CfnOutput(this.props.construct, `Output-${key}`, {
-            exportName: `${this.projectPrefix}-${key}`,
-            value: value
-        });
+    public exportOutput(key: string, value: string, prefixEnable=true, prefixCustomName?: string) {
+        if (prefixEnable) {
+            const prefix = prefixCustomName ? prefixCustomName : this.projectPrefix;
+            new cdk.CfnOutput(this.props.construct, `Output-${key}`, {
+                exportName: `${prefix}-${key}`,
+                value: value
+            });
+        } else {
+            new cdk.CfnOutput(this.props.construct, `Output-${key}`, {
+                exportName: key,
+                value: value
+            });
+        }
     }
 
-    public putParameter(paramKey: string, paramValue: string): string {
-        const paramKeyWithPrefix = `${this.projectPrefix}-${paramKey}`;
+    public putParameter(paramKey: string, paramValue: string, prefixEnable=true, prefixCustomName?: string): string {
+        if (prefixEnable) {
+            const paramKeyWithPrefix = prefixCustomName ? `${prefixCustomName}-${paramKey}` : `${this.projectPrefix}-${paramKey}`;
 
-        new ssm.StringParameter(this.props.construct, paramKey, {
-            parameterName: paramKeyWithPrefix,
-            stringValue: paramValue,
-        });
+            new ssm.StringParameter(this.props.construct, paramKey, {
+                parameterName: paramKeyWithPrefix,
+                stringValue: paramValue,
+            });
+        } else {
+            new ssm.StringParameter(this.props.construct, paramKey, {
+                parameterName: paramKey,
+                stringValue: paramValue,
+            });
+        }
 
         return paramKey;
     }
 
-    public getParameter(paramKey: string): string {
-        const paramKeyWithPrefix = `${this.projectPrefix}-${paramKey}`;
+    public getParameter(paramKey: string, prefixEnable=true, prefixCustomName?: string): string {
+        if (prefixEnable) {
+            const paramKeyWithPrefix = prefixCustomName ? `${prefixCustomName}-${paramKey}` : `${this.projectPrefix}-${paramKey}`;
 
-        return ssm.StringParameter.valueForStringParameter(
-            this.props.construct,
-            paramKeyWithPrefix
-        );
+            return ssm.StringParameter.valueForStringParameter(
+                this.props.construct,
+                paramKeyWithPrefix
+            );
+        } else {
+            return ssm.StringParameter.valueForStringParameter(
+                this.props.construct,
+                paramKey
+            );
+        }
     }
 
     public putVariable(variableKey: string, variableValue: string) {

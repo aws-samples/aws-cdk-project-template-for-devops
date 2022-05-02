@@ -16,7 +16,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export interface Project {
+export interface ProjectConfig {
     Name: string,
     Stage: string,
     Account: string,
@@ -24,7 +24,14 @@ export interface Project {
     Profile: string
 }
 
+export interface StackConfig {
+    Name: string,
+    UpdateRegionName?: string,
+    [name: string]: any
+}
+
 export interface AppConfig {
-    Project: Project;
-    Stack: any;
+    Project: ProjectConfig;
+    Global: any;
+    Stack: StackConfig;
 }
