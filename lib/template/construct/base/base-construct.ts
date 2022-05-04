@@ -88,11 +88,11 @@ export class BaseConstruct extends cdk.Construct implements ICommonHelper, IComm
         return this.commonHelper.getVariable(variableKey);
     }
 
-    createS3BucketName(baseName: string): string {
-        return this.commonGuardian.createS3BucketName(baseName);
+    createS3BucketName(baseName: string, suffix?: boolean): string {
+        return this.commonGuardian.createS3BucketName(baseName, suffix);
     }
 
-    createS3Bucket(baseName: string, encryption?: s3.BucketEncryption, versioned?: boolean): s3.Bucket {
-        return this.commonGuardian.createS3Bucket(baseName, encryption, versioned);
+    createS3Bucket(baseName: string, suffix?: boolean, encryption?: s3.BucketEncryption, versioned?: boolean): s3.Bucket {
+        return this.commonGuardian.createS3Bucket(baseName, suffix, encryption, versioned);
     }
 } 
