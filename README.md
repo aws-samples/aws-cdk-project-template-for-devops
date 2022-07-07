@@ -156,7 +156,7 @@ The final project part consists of:
         "Name": "HelloWorld", <----- Essential: your project name, all stacks will be prefixed with [Project.Name+Project.Stage]
         "Stage": "Demo",      <----- Essential: your project stage, all stacks will be prefixed with [Project.Name+Project.Stage]
         "Account": "75157*******", <----- Essential: update according to your AWS Account
-        "Region": "us-east-2",     <----- Essential: update according to your target resion
+        "Region": "us-east-2",     <----- Essential: update according to your target region
         "Profile": "cdk-demo"      <----- Essential: AWS Profile, keep empty string if no profile configured
     },
 
@@ -622,10 +622,10 @@ export class SampleVpcEcsStack extends base.VpcBaseStack {
 Execute the following command:
 
 ```bash
-sh scripts/setup_initial.sh config/app-config-demo.json
+sh script/setup_initial.sh config/app-config-demo.json
 ```
 
-For more details, open `scripts/setup_initial.sh` file.
+For more details, open `script/setup_initial.sh` file.
 
 ### Deploy stacks
 
@@ -636,7 +636,7 @@ Since each stack refers to each other through `Parameter Store`, it must be depl
 You can deploy the entire stacks by running:
 
 ```bash
-sh scripts/deploy_stacks.sh config/app-config-demo.json
+sh script/deploy_stacks.sh config/app-config-demo.json
 ```
 
 #### Deployment Results
@@ -701,7 +701,7 @@ sh ./script/destroy_stacks.sh config/app-config-demo.json
 ## 5. Projects based on this framework
 
 - [AWS CDK Deploy Pipeline using AWS CodePipeline](https://github.com/aws-samples/aws-cdk-deploy-pipeline-using-aws-codepipeline)
-- [AWS ECS DevOps usingAWS CDK](https://github.com/aws-samples/aws-ecs-devops-using-aws-cdk)
+- [AWS ECS DevOps using AWS CDK](https://github.com/aws-samples/aws-ecs-devops-using-aws-cdk)
 - [AWS IoT Greengrass Ver2 using AWS CDK](https://github.com/aws-samples/aws-iot-greengrass-v2-using-aws-cdk)
 - [Amazon SageMaker Built-in Algorithm MLOps Pipeline using AWS CDK](https://github.com/aws-samples/amazon-sagemaker-built-in-algorithms-mlops-pipeline-using-aws-cdk)
 - [Amazon Cognito and API Gateway based machine to machine authorization using AWS CDK](https://github.com/aws-samples/amazon-cognito-and-api-gateway-based-machine-to-machine-authorization-using-aws-cdk)
