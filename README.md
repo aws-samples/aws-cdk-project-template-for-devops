@@ -184,7 +184,7 @@ A sample stack configuration consists of:
         "RealtimeProcessing": {
             "Name": "DataProcessingStack",
 
-            "BucektName": "my-data",
+            "BucketName": "my-data",
 
             "LambdaName": "my-function1",
             "LambdaMemory": 256,
