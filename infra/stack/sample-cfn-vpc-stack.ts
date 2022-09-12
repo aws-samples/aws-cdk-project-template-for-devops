@@ -2,13 +2,14 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as cfn_inc from 'aws-cdk-lib/cloudformation-include';
 
 import * as base from '../../lib/template/stack/cfn/cfn-include-stack';
-import { AppContext } from '../../lib/template/app-context';
 import { Override } from '../../lib/template/stack/base/base-stack';
+import { AppContext } from '../../lib/template/app-context';
+import { StackConfig } from '../../lib/template/app-config'
 
 
 export class SampleCfnVpcStack extends base.CfnIncludeStack {
 
-    constructor(appContext: AppContext, stackConfig: any) {
+    constructor(appContext: AppContext, stackConfig: StackConfig) {
         super(appContext, stackConfig);
     }
 

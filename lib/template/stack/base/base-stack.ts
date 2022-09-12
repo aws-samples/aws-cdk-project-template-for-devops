@@ -42,7 +42,7 @@ export class BaseStack extends cdk.Stack implements ICommonHelper, ICommonGuardi
     private commonHelper: ICommonHelper;
     private commonGuardian: ICommonGuardian;
 
-    constructor(appContext: AppContext, stackConfig: any) {
+    constructor(appContext: AppContext, stackConfig: StackConfig) {
         let newProps = BaseStack.getStackCommonProps(appContext, stackConfig);
         super(appContext.cdkApp, stackConfig.Name, newProps);
 
@@ -67,7 +67,7 @@ export class BaseStack extends cdk.Stack implements ICommonHelper, ICommonGuardi
         });
     }
 
-    private static getStackCommonProps(appContext: AppContext, stackConfig: any): StackCommonProps{
+    private static getStackCommonProps(appContext: AppContext, stackConfig: StackConfig): StackCommonProps{
         let newProps = appContext.stackCommonProps;
         if (stackConfig.UpdateRegionName) {
             console.log(`[INFO] Region is updated: ${stackConfig.Name} ->> ${stackConfig.UpdateRegionName}`);

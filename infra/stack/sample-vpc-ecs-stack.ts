@@ -5,13 +5,14 @@ import * as sm from 'aws-cdk-lib/aws-secretsmanager';
 import * as ecsPatterns from 'aws-cdk-lib/aws-ecs-patterns';
 
 import * as base from '../../lib/template/stack/vpc/vpc-base-stack';
-import { AppContext } from '../../lib/template/app-context';
 import { Override } from '../../lib/template/stack/base/base-stack';
+import { AppContext } from '../../lib/template/app-context';
+import { StackConfig } from '../../lib/template/app-config'
 
 
 export class SampleVpcEcsStack extends base.VpcBaseStack {
 
-    constructor(appContext: AppContext, stackConfig: any) {
+    constructor(appContext: AppContext, stackConfig: StackConfig) {
         super(appContext, stackConfig);
     }
 

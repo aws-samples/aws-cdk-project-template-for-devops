@@ -21,6 +21,8 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 
 import * as base from '../base/base-stack';
 import { AppContext } from '../../app-context';
+import { StackConfig } from '../../app-config'
+
 import * as pipeline from '../../construct/pattern/pipeline-simple-pattern';
 
 
@@ -35,7 +37,7 @@ export abstract class PipelineBaseStack extends base.BaseStack {
         return undefined
     }
 
-    constructor(appContext: AppContext, stackConfig: any) {
+    constructor(appContext: AppContext, stackConfig: StackConfig) {
         super(appContext, stackConfig);
 
         const pipelineName = this.onPipelineName();

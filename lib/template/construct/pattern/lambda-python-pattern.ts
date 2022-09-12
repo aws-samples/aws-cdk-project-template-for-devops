@@ -59,7 +59,7 @@ export class LambdaSimplePattern extends BaseConstruct {
             functionName: lambdaName,
             code: lambda.Code.fromAsset(lambdaPath),
             handler: props.handler != undefined ? props.handler : 'handler.handle',
-            runtime: lambda.Runtime.PYTHON_3_7,
+            runtime: lambda.Runtime.PYTHON_3_9,
             timeout: props.timeout != undefined ? props.timeout : cdk.Duration.seconds(60 * 3),
             role: lambdaRole,
             environment: props.environments,

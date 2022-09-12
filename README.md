@@ -184,7 +184,7 @@ A sample stack configuration consists of:
         "RealtimeProcessing": {
             "Name": "DataProcessingStack",
 
-            "BucektName": "my-data",
+            "BucketName": "my-data",
 
             "LambdaName": "my-function1",
             "LambdaMemory": 256,
@@ -325,37 +325,7 @@ This stack creates a VPC using CloudFormation yaml file. For that reason, it inh
 
 - Stack Implementation
 
-```typescript
-import * as ec2 from 'aws-cdk-lib/aws-ec2';
-import * as cfn_inc from 'aws-cdk-lib/cloudformation-include';
-
-import * as base from '../../lib/template/stack/cfn/cfn-include-stack';
-import { AppContext } from '../../lib/template/app-context';
-import { Override } from '../../lib/template/stack/base/base-stack';
-
-
-export class SampleCfnVpcStack extends base.CfnIncludeStack {
-
-    constructor(appContext: AppContext, stackConfig: any) {
-        super(appContext, stackConfig);
-    }
-
-    @Override
-    onLoadTemplateProps(): base.CfnTemplateProps | undefined {
-        return {
-            templatePath: this.stackConfig.TemplatePath,
-            parameters: this.stackConfig.Parameters
-        };
-    }
-
-    @Override
-    onPostConstructor(cfnTemplate?: cfn_inc.CfnInclude) {
-        const cfnVpc = cfnTemplate?.getResource('VPC') as ec2.CfnVPC;
-
-        this.putVariable('VpcName', this.stackConfig.Parameters[0]['Value']);
-    }
-}
-```
+  - [sample-cfn-vpc-stack.ts](infra/stack/sample-cfn-vpc-stack.ts)
 
 VPC name is stored in memory via `putVariable` method and will be used to retrieve VPC object from other stacks.
 
@@ -394,53 +364,8 @@ And database parameters are saved through `putParateter` method, which will save
 ```
 
 - Stack Implementation
-  
-```typescript
-import * as cdk from 'aws-cdk-lib';
-import * as ec2 from 'aws-cdk-lib/aws-ec2';
-import * as rds from 'aws-cdk-lib/aws-rds';
 
-import * as base from '../../lib/template/stack/vpc/vpc-base-stack';
-import { AppContext } from '../../lib/template/app-context';
-import { Override } from '../../lib/template/stack/base/base-stack';
-
-
-export class SampleVpcRdsStack extends base.VpcBaseStack {
-
-    constructor(appContext: AppContext, stackConfig: any) {
-        super(appContext, stackConfig);
-    }
-
-    @Override
-    onLookupLegacyVpc(): base.VpcLegacyLookupProps | undefined {
-        return {
-            vpcNameLegacy: this.getVariable('VpcName')
-        };
-    }
-
-    @Override
-    onPostConstructor(baseVpc?: ec2.IVpc) {
-        const cluster = new rds.ServerlessCluster(this, 'serverless-rds', {
-            vpc: baseVpc!,
-            clusterIdentifier: this.withProjectPrefix(this.stackConfig.ClusterIdentifier),
-            defaultDatabaseName: this.stackConfig.DatabaseName,
-            engine: rds.DatabaseClusterEngine.AURORA_MYSQL,
-            scaling: {
-                autoPause: cdk.Duration.minutes(10),
-                minCapacity: rds.AuroraCapacityUnit.ACU_8,
-                maxCapacity: rds.AuroraCapacityUnit.ACU_32,
-            },
-            removalPolicy: cdk.RemovalPolicy.RETAIN,
-        });
-        
-        this.putParameter('DatabaseHostName', cluster.clusterEndpoint.hostname);
-        this.putParameter('DatabaseAddress', cluster.clusterEndpoint.socketAddress);
-        this.putParameter('DatabaseName', this.stackConfig.DatabaseName);
-        this.putParameter('DatabaseSecretArn', cluster.secret?.secretArn!);
-        this.putParameter('DatabaseSecurityGroup', cluster.connections.securityGroups[0].securityGroupId);
-    }
-}
-```
+  - [sample-vpc-rds-stack.ts](infra/stack/sample-vpc-rds-stack.ts)
 
 ### SampleVpcCloud9Stack
 
@@ -462,8 +387,10 @@ This stack just creates a Cloud9 EC2 instance in the first publict subent of VPC
             ...
         },
         "SampleVpcCloud9": {
-            "Name": "SampleVpcCloud9Stack"
+            "Name": "SampleVpcCloud9Stack",
 
+            "InstanceType": "t3.large",
+            "IamUser": "your-iam-user-id"
         },  
         "SampleVpcEcs": {
             ...
@@ -472,49 +399,11 @@ This stack just creates a Cloud9 EC2 instance in the first publict subent of VPC
 }
 ```
 
+Please change `IamUser` above configuration before deployment.
+
 - Stack Implementation
 
-```typescript
-import * as ec2 from 'aws-cdk-lib/aws-ec2';
-import * as cloud9 from 'aws-cdk-lib/aws-cloud9';
-
-import * as base from '../../lib/template/stack/vpc/vpc-base-stack';
-import { AppContext } from '../../lib/template/app-context';
-import { Override } from '../../lib/template/stack/base/base-stack';
-
-
-export class SampleVpcCloud9Stack extends base.VpcBaseStack {
-
-    constructor(appContext: AppContext, stackConfig: any) {
-        super(appContext, stackConfig);
-    }
-
-    @Override
-    onLookupLegacyVpc(): base.VpcLegacyLookupProps | undefined {
-        return {
-            vpcNameLegacy: this.getVariable('VpcName')
-        };
-    }
-
-    @Override
-    onPostConstructor(baseVpc?: ec2.IVpc) {
-
-        const subnet = baseVpc?.publicSubnets[0];
-        
-        new cloud9.Ec2Environment(this, 'Cloud9Env2', {
-            vpc: baseVpc!,
-            ec2EnvironmentName: this.withProjectPrefix('DatabaseConnection'),
-            instanceType: new ec2.InstanceType('t3.large'),
-            subnetSelection: {
-                subnets: [subnet!]
-            }
-        });
-
-        const databaseSecurityGroup = ec2.SecurityGroup.fromSecurityGroupId(this, 'DatabaseSecurityGroup', this.getParameter('DatabaseSecurityGroup'));
-        databaseSecurityGroup.addIngressRule(ec2.Peer.ipv4(subnet?.ipv4CidrBlock!), ec2.Port.tcp(3306), 'from cloud9 subnet');
-    }
-}
-```
+  - [sample-vpc-cloud9-stack.ts](infra/stack/sample-vpc-cloud9-stack.ts)
 
 ### SampleVpcEcsStack
 
@@ -550,72 +439,7 @@ This stack creates ECS Cluster/Serice/Task. Since it inherits from VpcBastStack,
 
 - Stack Implementation
 
-```typescript
-import * as ec2 from 'aws-cdk-lib/aws-ec2';
-import * as ecs from 'aws-cdk-lib/aws-ecs';
-import * as sm from 'aws-cdk-lib/aws-secretsmanager';
-import * as ecsPatterns from 'aws-cdk-lib/aws-ecs-patterns';
-
-import * as base from '../../lib/template/stack/vpc/vpc-base-stack';
-import { AppContext } from '../../lib/template/app-context';
-import { Override } from '../../lib/template/stack/base/base-stack';
-
-
-export class SampleVpcEcsStack extends base.VpcBaseStack {
-
-    constructor(appContext: AppContext, stackConfig: any) {
-        super(appContext, stackConfig);
-    }
-
-    @Override
-    onLookupLegacyVpc(): base.VpcLegacyLookupProps | undefined {
-        return {
-            vpcNameLegacy: this.getVariable('VpcName')
-        };
-    }
-
-    @Override
-    onPostConstructor(baseVpc?: ec2.IVpc) {
-        const databaseHostName = this.getParameter('DatabaseHostName');
-        const databaseName = this.getParameter('DatabaseName');
-        const databaseSecretArn = this.getParameter('DatabaseSecretArn');
-        const databaseSecret = sm.Secret.fromSecretCompleteArn(this, 'secret', databaseSecretArn);
-
-        const taskDef = new ecs.FargateTaskDefinition(this, 'TaskDef');
-        taskDef.addContainer('DefaultContainer', {
-            image: ecs.ContainerImage.fromAsset(this.stackConfig.FilePath),
-            logging: new ecs.AwsLogDriver({
-                streamPrefix: this.withProjectPrefix('backend-fastapi')
-            }),
-            environment: {
-                HOST_NAME: databaseHostName,
-                DATABASE_NAME: databaseName,
-                SECRET_ARN: databaseSecretArn,
-            },
-            portMappings: [{
-                containerPort: 80,
-                protocol: ecs.Protocol.TCP
-            }]
-        });
-        databaseSecret.grantRead(taskDef.taskRole);
-
-        const albEcsService = new ecsPatterns.ApplicationLoadBalancedFargateService(this, 'Service', {
-            cluster: new ecs.Cluster(this, 'cluster', {
-                vpc: baseVpc,
-                clusterName: this.withProjectPrefix(this.stackConfig.ClusterName)
-            }),
-            memoryLimitMiB: this.stackConfig.Memory,
-            cpu: this.stackConfig.Cpu,
-            taskDefinition: taskDef,
-            publicLoadBalancer: false,
-            desiredCount: parseInt(this.stackConfig.DesiredCount)
-        });
-
-        const databaseSecurityGroup = ec2.SecurityGroup.fromSecurityGroupId(this, 'DatabaseSecurityGroup', this.getParameter('DatabaseSecurityGroup'));
-        databaseSecurityGroup.addIngressRule(albEcsService.service.connections.securityGroups[0], ec2.Port.tcp(3306), 'from backend sg');
-    }
-}
-```
+  - [sample-vpc-ecs-stack.ts](infra/stack/sample-vpc-ecs-stack.ts)
 
 ### Install dependecies & Bootstrap
 

@@ -2,6 +2,7 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 
 import * as base from '../base/base-stack';
 import { AppContext } from '../../app-context';
+import { StackConfig } from '../../app-config'
 
 
 export interface VpcLegacyLookupProps {
@@ -15,7 +16,7 @@ export abstract class VpcBaseStack extends base.BaseStack {
     abstract onLookupLegacyVpc(): VpcLegacyLookupProps | undefined;
     abstract onPostConstructor(baseVpc?: ec2.IVpc): void;
 
-    constructor(appContext: AppContext, stackConfig: any) {
+    constructor(appContext: AppContext, stackConfig: StackConfig) {
         super(appContext, stackConfig);
 
         const props = this.onLookupLegacyVpc();
