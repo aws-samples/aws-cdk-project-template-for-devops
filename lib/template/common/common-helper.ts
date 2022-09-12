@@ -21,7 +21,7 @@ import * as ssm from '@aws-cdk/aws-ssm'
 
 
 export interface ICommonHelper {
-    findEnumType<T>(enumType: T, target: string): T[keyof T];
+    findEnumType<T extends object>(enumType: T, target: string): T[keyof T];
     exportOutput(key: string, value: string, prefixEnable?: boolean, prefixCustomName?: string): void;
     putParameter(paramKey: string, paramValue: string, prefixEnable?: boolean, prefixCustomName?: string): string;
     getParameter(paramKey: string, prefixEnable?: boolean, prefixCustomName?: string): string;
@@ -48,7 +48,7 @@ export class CommonHelper implements ICommonHelper {
         this.projectPrefix = props.projectPrefix;
     }
 
-    public findEnumType<T>(enumType: T, target: string): T[keyof T] {
+    public findEnumType<T extends object>(enumType: T, target: string): T[keyof T] {
         type keyType = keyof typeof enumType;
 
         const keyInString = Object.keys(enumType).find(key =>

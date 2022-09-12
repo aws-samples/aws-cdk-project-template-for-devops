@@ -85,7 +85,7 @@ export class BaseStack extends cdk.Stack implements ICommonHelper, ICommonGuardi
         return newProps;
     }
 
-    findEnumType<T>(enumType: T, target: string): T[keyof T] {
+    findEnumType<T extends object>(enumType: T, target: string): T[keyof T] {
         return this.commonHelper.findEnumType(enumType, target);
     }
 
