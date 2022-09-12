@@ -1,6 +1,6 @@
 {
   "name": "cdk-project-template",
-  "version": "0.1.0",
+  "version": "1.1.1",
   "bin": {
     "cdk-project-template": "infra/app-main.js"
   },
@@ -11,18 +11,18 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.10",
+    "@types/jest": "^27.5.2",
     "@types/node": "10.17.27",
-    "jest": "^26.4.2",
-    "ts-jest": "^26.2.0",
-    "aws-cdk": "2.18.0",
-    "ts-node": "^9.0.0",
+    "jest": "^27.5.1",
+    "ts-jest": "^27.1.4",
+    "aws-cdk": "2.40.0",
+    "ts-node": "^10.9.1",
     "typescript": "~3.9.7"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.18.0",
+    "aws-cdk-lib": "2.40.0",
     "constructs": "^10.0.0",
     "env-var": "6.3.0",
-    "source-map-support": "^0.5.16"
+    "source-map-support": "^0.5.21"
   }
 }
