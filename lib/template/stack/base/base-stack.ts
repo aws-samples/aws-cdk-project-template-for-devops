@@ -116,4 +116,12 @@ export class BaseStack extends cdk.Stack implements ICommonHelper, ICommonGuardi
     createS3Bucket(baseName: string, suffix?: boolean, encryption?: s3.BucketEncryption, versioned?: boolean): s3.Bucket {
         return this.commonGuardian.createS3Bucket(baseName, suffix, encryption, versioned);
     }
+
+    withStackName(baseName: string, delimiter='-'): string {
+        return `${this.stackName}${delimiter}${baseName}`;
+    }
+
+    withProjectPrefix(baseName: string, delimiter='-'): string {
+        return `${this.projectPrefix}${delimiter}${baseName}`;
+    }
 }

@@ -26,7 +26,7 @@ export class SampleVpcCloud9Stack extends base.VpcBaseStack {
         const subnet = baseVpc?.publicSubnets[0];
 
         new cloud9.CfnEnvironmentEC2(this, 'Cloud9Env2', {
-            name: `${this.projectPrefix}-DatabaseConnection`,
+            name: this.withProjectPrefix('DatabaseConnection'),
             instanceType: new ec2.InstanceType('t3.large').toString(),
             subnetId: subnet?.subnetId
         });

@@ -25,7 +25,7 @@ export class SampleVpcRdsStack extends base.VpcBaseStack {
     onPostConstructor(baseVpc?: ec2.IVpc) {
         const cluster = new rds.ServerlessCluster(this, 'serverless-rds', {
             vpc: baseVpc!,
-            clusterIdentifier: `${this.projectPrefix}-${this.stackConfig.ClusterIdentifier}`,
+            clusterIdentifier: this.withProjectPrefix(this.stackConfig.ClusterIdentifier),
             defaultDatabaseName: this.stackConfig.DatabaseName,
             engine: rds.DatabaseClusterEngine.AURORA_MYSQL,
             scaling: {

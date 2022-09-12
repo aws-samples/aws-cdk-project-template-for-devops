@@ -33,7 +33,7 @@ export class SampleVpcEcsStack extends base.VpcBaseStack {
         taskDef.addContainer('DefaultContainer', {
             image: ecs.ContainerImage.fromAsset(this.stackConfig.FilePath),
             logging: new ecs.AwsLogDriver({
-                streamPrefix: `${this.projectPrefix}-backend-fastapi`
+                streamPrefix: this.withProjectPrefix('backend-fastapi')
             }),
             environment: {
                 HOST_NAME: databaseHostName,
@@ -50,7 +50,7 @@ export class SampleVpcEcsStack extends base.VpcBaseStack {
         const albEcsService = new ecsPatterns.ApplicationLoadBalancedFargateService(this, 'Service', {
             cluster: new ecs.Cluster(this, 'cluster', {
                 vpc: baseVpc,
-                clusterName: `${this.projectPrefix}-${this.stackConfig.ClusterName}`
+                clusterName: this.withProjectPrefix(this.stackConfig.ClusterName)
             }),
             memoryLimitMiB: this.stackConfig.Memory,
             cpu: this.stackConfig.Cpu,

@@ -24,6 +24,7 @@ export class SampleCfnVpcStack extends base.CfnIncludeStack {
     onPostConstructor(cfnTemplate?: cfn_inc.CfnInclude) {
         const cfnVpc = cfnTemplate?.getResource('VPC') as ec2.CfnVPC;
 
-        this.putVariable('VpcName', this.stackConfig.Parameters[0]['Value']);
+        const vpcName = this.stackConfig.Parameters[0]['Value'];
+        this.putVariable('VpcName', vpcName);
     }
 }

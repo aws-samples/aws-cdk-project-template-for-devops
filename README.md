@@ -422,7 +422,7 @@ export class SampleVpcRdsStack extends base.VpcBaseStack {
     onPostConstructor(baseVpc?: ec2.IVpc) {
         const cluster = new rds.ServerlessCluster(this, 'serverless-rds', {
             vpc: baseVpc!,
-            clusterIdentifier: `${this.projectPrefix}-${this.stackConfig.ClusterIdentifier}`,
+            clusterIdentifier: this.withProjectPrefix(this.stackConfig.ClusterIdentifier),
             defaultDatabaseName: this.stackConfig.DatabaseName,
             engine: rds.DatabaseClusterEngine.AURORA_MYSQL,
             scaling: {
@@ -503,7 +503,7 @@ export class SampleVpcCloud9Stack extends base.VpcBaseStack {
         
         new cloud9.Ec2Environment(this, 'Cloud9Env2', {
             vpc: baseVpc!,
-            ec2EnvironmentName: `${this.projectPrefix}-DatabaseConnection`,
+            ec2EnvironmentName: this.withProjectPrefix('DatabaseConnection'),
             instanceType: new ec2.InstanceType('t3.large'),
             subnetSelection: {
                 subnets: [subnet!]
@@ -585,7 +585,7 @@ export class SampleVpcEcsStack extends base.VpcBaseStack {
         taskDef.addContainer('DefaultContainer', {
             image: ecs.ContainerImage.fromAsset(this.stackConfig.FilePath),
             logging: new ecs.AwsLogDriver({
-                streamPrefix: `${this.projectPrefix}-backend-fastapi`
+                streamPrefix: this.withProjectPrefix('backend-fastapi')
             }),
             environment: {
                 HOST_NAME: databaseHostName,
@@ -602,7 +602,7 @@ export class SampleVpcEcsStack extends base.VpcBaseStack {
         const albEcsService = new ecsPatterns.ApplicationLoadBalancedFargateService(this, 'Service', {
             cluster: new ecs.Cluster(this, 'cluster', {
                 vpc: baseVpc,
-                clusterName: `${this.projectPrefix}-${this.stackConfig.ClusterName}`
+                clusterName: this.withProjectPrefix(this.stackConfig.ClusterName)
             }),
             memoryLimitMiB: this.stackConfig.Memory,
             cpu: this.stackConfig.Cpu,

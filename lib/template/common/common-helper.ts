@@ -28,6 +28,8 @@ export interface ICommonHelper {
     getParameter(paramKey: string, prefixEnable?: boolean, prefixCustomName?: string): string;
     putVariable(variableKey: string, variableValue: string): void;
     getVariable(variableKey: string): string;
+    withStackName(baseName: string, delimiter?: string): string;
+    withProjectPrefix(baseName: string, delimiter?: string): string;
 }
 
 export interface CommonHelperProps {
@@ -117,5 +119,13 @@ export class CommonHelper implements ICommonHelper {
 
     public getVariable(variableKey: string): string {
         return this.props.variables[variableKey];
+    }
+
+    public withStackName(baseName: string, delimiter='-'): string {
+        return `${this.stackName}${delimiter}${baseName}`;
+    }
+
+    public withProjectPrefix(baseName: string, delimiter='-'): string {
+        return `${this.projectPrefix}${delimiter}${baseName}`;
     }
 }

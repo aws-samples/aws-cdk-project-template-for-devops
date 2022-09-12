@@ -35,6 +35,7 @@ export interface ConstructCommonProps {
 export class BaseConstruct extends Construct implements ICommonHelper, ICommonGuardian  {
     protected stackConfig: any;
     protected projectPrefix: string;
+    protected stackName: string;
     protected commonProps: ConstructCommonProps;
 
     private commonHelper: ICommonHelper;
@@ -46,6 +47,7 @@ export class BaseConstruct extends Construct implements ICommonHelper, ICommonGu
         this.stackConfig = props.stackConfig;
         this.commonProps = props;
         this.projectPrefix = props.projectPrefix;
+        this.stackName = props.stackName;
 
         this.commonHelper = new CommonHelper({
             construct: this,
@@ -95,5 +97,13 @@ export class BaseConstruct extends Construct implements ICommonHelper, ICommonGu
 
     createS3Bucket(baseName: string, suffix?: boolean, encryption?: s3.BucketEncryption, versioned?: boolean): s3.Bucket {
         return this.commonGuardian.createS3Bucket(baseName, suffix, encryption, versioned);
+    }
+
+    withStackName(baseName: string, delimiter='-'): string {
+        return `${this.stackName}${delimiter}${baseName}`;
+    }
+
+    withProjectPrefix(baseName: string, delimiter='-'): string {
+        return `${this.projectPrefix}${delimiter}${baseName}`;
     }
 } 
