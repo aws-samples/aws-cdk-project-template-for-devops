@@ -65,7 +65,7 @@ export class BaseConstruct extends Construct implements ICommonHelper, ICommonGu
 
     }
 
-    findEnumType<T>(enumType: T, target: string): T[keyof T] {
+    findEnumType<T extends object>(enumType: T, target: string): T[keyof T] {
         return this.commonHelper.findEnumType(enumType, target);
     }
 
