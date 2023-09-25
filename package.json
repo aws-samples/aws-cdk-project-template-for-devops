@@ -1,5 +1,5 @@
 {
-  "name": "cdk-project-template",
+  "name": "@aws-samples/cdk-project-template",
   "version": "1.1.1",
   "bin": {
     "cdk-project-template": "infra/app-main.js"
